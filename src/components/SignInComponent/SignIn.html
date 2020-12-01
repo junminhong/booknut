@@ -20,7 +20,7 @@
             <button type="button" @click="signin" class="btn btn-primary" style="text-align: center">SIGN IN</button>
             <div class="form-group" style="padding-top: 10px">
                 <label>Connect with:</label><br>
-                <img src="{{asset('imgs/png/google.png')}}" width="30px" height="30px"/>
+                <a @click="signinWithGoogle" class="fa fa-google"></a>
                 <img src="{{asset('imgs/png/facebook.png')}}" width="30px" height="30px"/>
             </div>
         </div>

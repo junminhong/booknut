@@ -1,5 +1,5 @@
 <template>
-  <header-component :user_name="user_name" />
+  <header-component :user_name="user_name" :user="user"/>
   <router-view/>
 </template>
 
@@ -20,7 +20,7 @@ export default {
     return{
       user_cer: db.auth().currentUser,
       user_uid: '',
-      user_name: ''
+      user_name: '',
     }
   },
   methods: {
@@ -30,7 +30,15 @@ export default {
           console.log(user)
           this.user_uid = user.uid
           db.firestore().collection('users').doc(this.user_uid).get().then(doc=>{
-            this.user_name = doc.data().user_name
+            if (doc.data().user_name.toString().length != 0){
+              this.user_name = doc.data().user_name
+            }
+          }).catch( error => {
+            console.log(error)
+            console.log(this.user_uid)
+            db.firestore().collection('users').doc(this.user_uid).set({
+              user_name: 'booknut'
+            })
           })
         }else{
           this.user_uid = ''
@@ -41,7 +49,8 @@ export default {
         if (result.credential) {
           console.log(result.credential.accessToken)
           console.log(result.user)
-          Swal.fire("成功")
+          // Swal.fire("成功")
+          location.href = '/'
         }
       }).catch(function(error) {
         console.log(error)

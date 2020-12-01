@@ -52,6 +52,15 @@ export default {
               console.log(error)
         })
       }
+    },
+    signinWithGoogle: function (){
+      const googleProvider = new db.auth.GoogleAuthProvider
+      db.auth().signInWithRedirect(googleProvider).then(
+          result => {
+            console.log(result)
+            location.href = '/'
+          }
+      )
     }
   }
 }
