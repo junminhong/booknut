@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import HeaderComponent from '@/components/HeaderComponent/index'
+import HeaderComponent from '@/components/HeaderComponent/Header'
 import db from "@/db";
 import Swal from "sweetalert2";
 

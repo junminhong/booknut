@@ -4,6 +4,9 @@ import Signup from '../components/SignUpComponent/SignUp'
 import SignIn from "@/components/SignInComponent/SignIn"
 import NewBook from "@/components/NewBookComponent/NewBook"
 import Profile from '@/components/ProfileComponent/Profile'
+import OldBook from "@/components/OldBookComponent/OldBook"
+import ProductRelease from "@/components/ProductReleaseComponent/ProductRelease"
+import Discuss from "@/components/DiscussComponent/Discuss"
 const routes = [
   {
     path: '/',
@@ -37,6 +40,21 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/old',
+    name: 'OldBook',
+    component: OldBook
+  },
+  {
+    path: '/release',
+    name: 'ProductRelease',
+    component: ProductRelease
+  },
+  {
+    path: '/discuss',
+    name: 'Discuss',
+    component: Discuss
   }
 ]
 

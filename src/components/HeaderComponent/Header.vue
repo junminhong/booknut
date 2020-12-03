@@ -1,4 +1,4 @@
-<template src="./template.html">
+<template src="Header.html">
 
 </template>
 
@@ -38,6 +38,6 @@ export default {
 }
 </script>
 
-<style src="./style.css" scoped>
+<style src="Header.css" scoped>
 
 </style>
