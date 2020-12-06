@@ -3,10 +3,8 @@
 </template>
 
 <script>
-
 import Swal from "sweetalert2";
 import db from "@/db";
-
 
 export default {
   name: "SignIn-component",

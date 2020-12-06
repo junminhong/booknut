@@ -21,38 +21,42 @@
                             <div class="e-profile">
                                 <div class="row">
                                     <div class="col-12 col-sm-auto mb-3">
-                                        <div class="mx-auto" style="width: 140px;">
-                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
+                                        <div class="mx-auto" style="width: 150px;">
+                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 150px; background-color: rgb(233, 236, 239);">
+                                                <img id="book_one_pic_img" src="#" style="width: 150px; height: 150px" hidden="true"/>
                                             </div>
                                         </div>
                                         <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3" style="padding-left: 10px">
                                             <div class="text-center text-sm-left mb-2 mb-sm-0">
                                                 <div class="mt-2">
-                                                    <button class="btn btn-primary" type="button">
+                                                    <label class="btn btn-outline-primary">
                                                         <i class="fa fa-fw fa-camera"></i>
-                                                        <span>上傳商品照片</span>
-                                                    </button>
+                                                        上傳商品照
+                                                        <input type="file" @change="previewOnePic" class="account-settings-fileinput">
+                                                    </label>
                                                 </div>
                                                 <div class="text-muted"><small>支持JPG、PNG，最大上限1MB</small></div>
+                                                <div style="color: red"><small>{{book_one_pic_error_msg}}</small></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-auto mb-3">
-                                        <div class="mx-auto" style="width: 140px;">
-                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
+                                        <div class="mx-auto" style="width: 150px;">
+                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 150px; background-color: rgb(233, 236, 239);">
+                                                <img id="book_two_pic_img" src="#" style="width: 150px; height: 150px" hidden="true"/>
                                             </div>
                                         </div>
                                         <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                             <div class="text-center text-sm-left mb-2 mb-sm-0">
                                                 <div class="mt-2">
-                                                    <button class="btn btn-primary" type="button">
+                                                    <label class="btn btn-outline-primary">
                                                         <i class="fa fa-fw fa-camera"></i>
-                                                        <span>上傳商品照片</span>
-                                                    </button>
+                                                        上傳商品照
+                                                        <input type="file" @change="previewTwoPic" class="account-settings-fileinput">
+                                                    </label>
                                                 </div>
                                                 <div class="text-muted"><small>支持JPG、PNG，最大上限1MB</small></div>
+                                                <div style="color: red"><small>{{book_two_pic_error_msg}}</small></div>
                                             </div>
                                         </div>
                                     </div>
@@ -70,13 +74,15 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>ISBN</label>
-                                                                <input class="form-control" type="text" name="name" placeholder="">
+                                                                <input class="form-control" v-model="book_isbn" type="text" name="name" placeholder="">
+                                                                <div style="color: red"><small>{{book_isbn_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>書名</label>
-                                                                <input class="form-control" type="text" name="username" placeholder="">
+                                                                <input class="form-control" v-model="book_name" type="text" name="username" placeholder="">
+                                                                <div style="color: red"><small>{{book_name_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -84,13 +90,55 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>出版社</label>
-                                                                <input class="form-control" type="text" placeholder="">
+                                                                <input class="form-control" v-model="book_publishing_house" type="text" placeholder="">
+                                                                <div style="color: red"><small>{{book_publishing_house_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>出版日期</label>
-                                                                <input class="form-control" type="date" placeholder="">
+                                                                <input class="form-control" v-model="book_publishing_date" type="date" placeholder="">
+                                                                <div style="color: red"><small>{{book_publishing_date_error_msg}}</small></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label>書籍狀況</label>
+                                                                <select class="form-control" v-model="book_status">
+                                                                    <option value="new" selected="selected">全新未拆</option>
+                                                                    <option value="nine_new">九成新</option>
+                                                                    <option value="eight_new">八成新</option>
+                                                                    <option value="old">有點年紀了</option>
+                                                                </select>
+                                                                <div style="color: red"><small>{{book_status_error_msg}}</small></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label>書籍分類</label>
+                                                                <select class="form-control" v-model="book_classification">
+                                                                    <option value="exam_book" selected="selected">考試用書</option>
+                                                                    <option value="professional_book">專業教科書</option>
+                                                                    <option value="computer_book">語言電腦</option>
+                                                                    <option value="religious_humanities_book">宗教人文</option>
+                                                                    <option value="art_design_book">藝術設計</option>
+                                                                    <option value="travel_fool_book">旅遊飲食</option>
+                                                                    <option value="parent_child_book">親子童書</option>
+                                                                    <option value="comic_novel_book">漫畫小說</option>
+                                                                    <option value="business_finance_book">商業理財</option>
+                                                                </select>
+                                                                <div style="color: red"><small>{{book_classification_error_msg}}</small></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label>售價金額</label>
+                                                                <input class="form-control" v-model="book_money" type="text" placeholder="">
+                                                                <div style="color: red"><small>{{book_money_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -98,7 +146,8 @@
                                                         <div class="col mb-3">
                                                             <div class="form-group">
                                                                 <label>商品描述</label>
-                                                                <textarea class="form-control" rows="5" placeholder=""></textarea>
+                                                                <textarea class="form-control" v-model="book_description" rows="5" placeholder=""></textarea>
+                                                                <div style="color: red"><small>{{book_description_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,11 +159,12 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>交易方式</label>
-                                                                <select class="form-control">
-                                                                    <option value="" selected="selected">貨到付款</option>
-                                                                    <option value="">線上刷卡</option>
-                                                                    <option value="">堅果幣支付</option>
+                                                                <select class="form-control" v-model="book_transaction">
+                                                                    <option value="cash_on_delivery" selected="selected">貨到付款</option>
+                                                                    <option value="swipe_online">線上刷卡</option>
+                                                                    <option value="nut_coin_payment">堅果幣支付</option>
                                                                 </select>
+                                                                <div style="color: red"><small>{{book_transaction_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -122,11 +172,12 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>寄貨方式</label>
-                                                                <select class="form-control">
-                                                                    <option value="" selected="selected">7-11物流</option>
-                                                                    <option value="">全家物流</option>
-                                                                    <option value="">黑貓宅急便</option>
+                                                                <select class="form-control" v-model="book_shipment">
+                                                                    <option value="seven_eleven" selected="selected">7-11物流</option>
+                                                                    <option value="family">全家物流</option>
+                                                                    <option value="black_cat">黑貓宅急便</option>
                                                                 </select>
+                                                                <div style="color: red"><small>{{book_shipment_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -134,11 +185,12 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>出貨天數</label>
-                                                                <select class="form-control">
-                                                                    <option value="" selected="selected">3日內</option>
-                                                                    <option value="">7日內</option>
-                                                                    <option value="">較長出貨日</option>
+                                                                <select class="form-control" v-model="book_shipment_date">
+                                                                    <option value="three_days" selected="selected">3日內</option>
+                                                                    <option value="seven_days">7日內</option>
+                                                                    <option value="long_days">較長出貨日</option>
                                                                 </select>
+                                                                <div style="color: red"><small>{{book_shipment_date_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,7 +234,7 @@
                             <div class="px-xl-3">
                                 <button class="btn btn-block btn-secondary">
                                     <i class="fa fa-sign-out"></i>
-                                    <span>發布商品</span>
+                                    <span @click="checkFrom">發布商品</span>
                                 </button>
                             </div>
                         </div>

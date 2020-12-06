@@ -29,6 +29,7 @@ export default {
         if (user != null){
           console.log(user)
           this.user_uid = user.uid
+
           db.firestore().collection('users').doc(this.user_uid).get().then(doc=>{
             if (doc.data().user_name.toString().length != 0){
               this.user_name = doc.data().user_name
