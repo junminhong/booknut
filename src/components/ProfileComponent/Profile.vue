@@ -8,6 +8,9 @@ import db from "@/db";
 
 export default {
   name: "Profile",
+  props: {
+    user: Object,
+  },
   data(){
     return{
       user_name:'',

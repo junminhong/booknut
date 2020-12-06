@@ -1,6 +1,6 @@
 <template>
-  <header-component :user_name="user_name" :user="user"/>
-  <router-view/>
+  <header-component :user_name="user_name"/>
+  <router-view :user="user"/>
 </template>
 
 <script>
@@ -21,6 +21,7 @@ export default {
       user_cer: db.auth().currentUser,
       user_uid: '',
       user_name: '',
+      user: '',
     }
   },
   methods: {
@@ -29,7 +30,7 @@ export default {
         if (user != null){
           console.log(user)
           this.user_uid = user.uid
-
+          this.user = user
           db.firestore().collection('users').doc(this.user_uid).get().then(doc=>{
             if (doc.data().user_name.toString().length != 0){
               this.user_name = doc.data().user_name

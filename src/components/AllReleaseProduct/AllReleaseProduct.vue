@@ -1,11 +1,11 @@
-<template src="./OldBook.html">
+<template src="./AllReleaseProduct.html">
 
 </template>
 
 <script>
-import db from "@/db"
+import db from "@/db";
 export default {
-  name: "OldBook",
+  name: "AllReleaseProduct",
   data(){
     return{
       book_isbn: '',
@@ -19,25 +19,24 @@ export default {
       book_shipment: '',
       book_shipment_date: '',
       book_money: '',
-      querySnapshot: '',
-      all_doc_data: ''
+      all_doc_data: []
     }
-  },
-  mounted() {
-    this.showAllBooks()
   },
   props: {
     user: Object,
   },
+  watch: {
+    user: [{
+      handler: 'showAllReleaseProduct'
+    }]
+  },
   methods:{
-    showAllBooks: function (){
-      db.firestore().collection('market_books').doc("exam_book").collection("release_product").get().then(querySnapshot => {
+    showAllReleaseProduct: function (){
+      db.firestore().collection("users").doc(this.user.uid).collection("release_product").get().then(all_doc=>{
         let doc_data = [];
-        querySnapshot.forEach(doc => {
+        all_doc.forEach(doc=>{
           doc_data.push(doc.data())
-        });
-        this.querySnapshot = querySnapshot
-        console.log(doc_data)
+        })
         this.all_doc_data = doc_data
       })
     }
@@ -45,6 +44,6 @@ export default {
 }
 </script>
 
-<style src="./OldBool.css" scoped>
+<style src="./AllReleaseProduct.css" scoped>
 
 </style>

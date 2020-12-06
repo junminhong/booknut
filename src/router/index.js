@@ -7,6 +7,7 @@ import Profile from '@/components/ProfileComponent/Profile'
 import OldBook from "@/components/OldBookComponent/OldBook"
 import ProductRelease from "@/components/ProductReleaseComponent/ProductRelease"
 import Discuss from "@/components/DiscussComponent/Discuss"
+import AllReleaseProduct from "@/components/AllReleaseProduct/AllReleaseProduct";
 const routes = [
   {
     path: '/',
@@ -55,6 +56,11 @@ const routes = [
     path: '/discuss',
     name: 'Discuss',
     component: Discuss
+  },
+  {
+    path: '/allrelease',
+    name: 'AllReleaseProduct',
+    component: AllReleaseProduct
   }
 ]
 

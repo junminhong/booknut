@@ -8,6 +8,9 @@ let dateFormat = require("dateformat")
 import db from "@/db"
 export default {
   name: "ProductRelease",
+  props: {
+    user: Object,
+  },
   data(){
     return{
       book_one_pic: '',
@@ -143,48 +146,45 @@ export default {
       let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
       let storageRef_one = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_uuid + "1.jpg")
       let storageRef_two = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_uuid + "2.jpg")
-      db.auth().onAuthStateChanged(user =>{
-        if (user != null){
-          this.user_uid = user.uid
-          storageRef_one.put(this.book_one_pic)
-          storageRef_two.put(this.book_two_pic)
-          db.firestore().collection('users').doc(this.user_uid).collection("release_product").doc(this.product_uuid).set({
-            book_isbn: this.book_isbn,
-            book_name: this.book_name,
-            book_publishing_house: this.book_publishing_house,
-            book_publishing_date: this.book_publishing_date,
-            book_classification: this.book_classification,
-            book_description: this.book_description,
-            book_status: this.book_status,
-            book_transaction: this.book_transaction,
-            book_shipment: this.book_shipment,
-            book_shipment_date: this.book_shipment_date,
-            book_money: this.book_money,
-            customer_click_count: 0,
-            release_time: date,
-            update_time: date
-          })
-          db.firestore().collection('market_books').doc(this.book_classification).collection("release_product").doc(this.product_uuid).set({
-            book_isbn: this.book_isbn,
-            book_name: this.book_name,
-            book_publishing_house: this.book_publishing_house,
-            book_publishing_date: this.book_publishing_date,
-            book_classification: this.book_classification,
-            book_description: this.book_description,
-            book_status: this.book_status,
-            book_transaction: this.book_transaction,
-            book_shipment: this.book_shipment,
-            book_shipment_date: this.book_shipment_date,
-            book_money: this.book_money,
-            release_time: date,
-            update_time: date,
-            release_user_uuid: this.user_uid,
-            customer_click_count: 0
-          }).then(function (){
-            location.href = 'release'
-          })
-        }
-      })
+      if (this.user != null){
+        storageRef_one.put(this.book_one_pic)
+        storageRef_two.put(this.book_two_pic)
+        db.firestore().collection('users').doc(this.user.uid).collection("release_product").doc(this.product_uuid).set({
+          book_isbn: this.book_isbn,
+          book_name: this.book_name,
+          book_publishing_house: this.book_publishing_house,
+          book_publishing_date: this.book_publishing_date,
+          book_classification: this.book_classification,
+          book_description: this.book_description,
+          book_status: this.book_status,
+          book_transaction: this.book_transaction,
+          book_shipment: this.book_shipment,
+          book_shipment_date: this.book_shipment_date,
+          book_money: this.book_money,
+          customer_click_count: 0,
+          release_time: date,
+          update_time: date
+        })
+        db.firestore().collection('market_books').doc(this.book_classification).collection("release_product").doc(this.product_uuid).set({
+          book_isbn: this.book_isbn,
+          book_name: this.book_name,
+          book_publishing_house: this.book_publishing_house,
+          book_publishing_date: this.book_publishing_date,
+          book_classification: this.book_classification,
+          book_description: this.book_description,
+          book_status: this.book_status,
+          book_transaction: this.book_transaction,
+          book_shipment: this.book_shipment,
+          book_shipment_date: this.book_shipment_date,
+          book_money: this.book_money,
+          release_time: date,
+          update_time: date,
+          release_user_uuid: this.user_uid,
+          customer_click_count: 0
+        }).then(function (){
+          location.href = 'release'
+        })
+      }
     }
   }
 }
