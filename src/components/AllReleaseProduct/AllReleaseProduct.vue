@@ -19,7 +19,8 @@ export default {
       book_shipment: '',
       book_shipment_date: '',
       book_money: '',
-      all_doc_data: []
+      all_doc_data: [],
+      total_index: '',
     }
   },
   props: {
@@ -38,7 +39,14 @@ export default {
           doc_data.push(doc.data())
         })
         this.all_doc_data = doc_data
+        if (doc_data.length < 10){
+          this.total_index = 1
+        }else{
+          this.total_index = doc_data.length / 10
+        }
+
       })
+
     }
   }
 }

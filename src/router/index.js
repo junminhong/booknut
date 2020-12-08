@@ -7,7 +7,8 @@ import Profile from '@/components/ProfileComponent/Profile'
 import OldBook from "@/components/OldBookComponent/OldBook"
 import ProductRelease from "@/components/ProductReleaseComponent/ProductRelease"
 import Discuss from "@/components/DiscussComponent/Discuss"
-import AllReleaseProduct from "@/components/AllReleaseProduct/AllReleaseProduct";
+import AllReleaseProduct from "@/components/AllReleaseProduct/AllReleaseProduct"
+import ShopCart from "@/components/ShopCart/ShopCart"
 const routes = [
   {
     path: '/',
@@ -61,6 +62,11 @@ const routes = [
     path: '/allrelease',
     name: 'AllReleaseProduct',
     component: AllReleaseProduct
+  },
+  {
+    path: '/shopcart',
+    name: 'ShopCart',
+    component: ShopCart
   }
 ]
 

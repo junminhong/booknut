@@ -24,51 +24,78 @@
                         </thead>
                         <tbody>
                         <tr v-for="doc in this.all_doc_data">
-                            <td>
+                            <td style="width: 13%;">
                                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                <a href="#" class="user-link">{{doc.book_name}}</a>
+                                <span class="user-link">{{doc.book_name}}</span>
                                 <span class="user-subhead">{{doc.book_isbn}}</span>
                             </td>
                             <td>
                                 2013/08/08
                             </td>
-                            <td class="text-center">
-                                <span class="label label-default">Inactive</span>
+                            <td class="text-center" v-if="doc.book_status === 'new'">
+                                <span class="badge badge-success">全新未拆</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_status === 'nine_new'">
+                                <span class="badge badge-info">九成新</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_status === 'eight_new'">
+                                <span class="badge badge-warning">八成新</span>
+                            </td>
+                            <td class="text-center" v-else="doc.book_status === 'old'">
+                                <span class="badge badge-danger">有點久遠了</span>
                             </td>
                             <td>
-                                <a href="#">mila@kunis.com</a>
+                                {{doc.book_description}}
+                            </td>
+                            <td >
+                               {{doc.book_publishing_house}}
                             </td>
                             <td>
-                                <a href="#">mila@kunis.com</a>
+                               {{doc.book_publishing_date}}
                             </td>
                             <td>
-                                <a href="#">mila@kunis.com</a>
+                               ${{doc.book_money}}
+                            </td>
+                            <td v-if="doc.book_transaction === 'cash_on_delivery'">
+                               貨到付款
+                            </td>
+                            <td v-else-if="doc.book_transaction === 'nut_coin_payment'">
+                                堅果幣支付
+                            </td>
+                            <td v-else="doc.book_transaction === 'swipe_online'">
+                                信用卡支付
+                            </td>
+                            <td v-if="doc.book_shipment === 'seven_eleven'">
+                                7-11物流
+                            </td>
+                            <td v-else-if="doc.book_shipment === 'family'">
+                                全家物流
+                            </td>
+                            <td v-else="doc.book_shipment === 'black_cat'">
+                                黑貓宅急便
+                            </td>
+                            <td v-if="doc.book_shipment_date === 'three_days'">
+                                三日內
+                            </td>
+                            <td v-else-if="doc.book_shipment_date === 'seven_days'">
+                                七日內
+                            </td>
+                            <td v-else="doc.book_shipment_date === 'long_days'">
+                                較長出貨日
                             </td>
                             <td>
-                                <a href="#">mila@kunis.com</a>
+                                {{doc.release_time}}
                             </td>
                             <td>
-                                <a href="#">mila@kunis.com</a>
-                            </td>
-                            <td>
-                                <a href="#">mila@kunis.com</a>
-                            </td>
-                            <td>
-                                <a href="#">mila@kunis.com</a>
-                            </td>
-                            <td>
-                                <a href="#">mila@kunis.com</a>
-                            </td>
-                            <td>
-                                <a href="#">mila@kunis.com</a>
+                                {{doc.update_time}}
                             </td>
                             <td style="width: 10%;">
-<!--                                <a href="#" class="table-link">-->
-<!--									<span class="fa-stack">-->
-<!--										<i class="fa fa-square fa-stack-2x"></i>-->
-<!--										<i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>-->
-<!--									</span>-->
-<!--                                </a>-->
+                                <!--                                <a href="#" class="table-link">-->
+                                <!--									<span class="fa-stack">-->
+                                <!--										<i class="fa fa-square fa-stack-2x"></i>-->
+                                <!--										<i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>-->
+                                <!--									</span>-->
+                                <!--                                </a>-->
                                 <a href="#" class="table-link">
 									<span class="fa-stack">
 										<i class="fa fa-square fa-stack-2x"></i>
@@ -89,29 +116,27 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-4" ></div>
-        <div class="col-4" >
-            <nav aria-label="Page navigation example" >
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="col-4" ></div>
+    <div style="text-align: center">
+
+    </div>
+    <div style="text-align: center" >
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item" v-for="index in this.total_index"><a class="page-link" href="#">{{ index }}</a></li>
+
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>

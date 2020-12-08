@@ -39,13 +39,15 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right: 10px">
                         <a class="dropdown-item" href="/profile">個人資料</a>
                         <a class="dropdown-item" href="release">賣家中心</a>
+                        <a class="dropdown-item" href="release">購買中心</a>
+                        <a class="dropdown-item" href="release">物流中心</a>
                         <a class="dropdown-item" href="#">常見問題</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" @click="userSignout">登出</a>
                     </div>
                 </li>
             </div>
-            <a href="#" class="nav-item nav-link">
+            <a href="shopcart" class="nav-item nav-link">
                 <img src="../../assets/imgs/png/shopping-cart.png" style="width: 25px; height: 25px">
             </a>
             <router-link to="/signup" :hidden="isSignin" class="nav-item nav-link">註冊</router-link>

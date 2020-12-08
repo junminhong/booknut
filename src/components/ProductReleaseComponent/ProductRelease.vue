@@ -6,6 +6,7 @@
 import { uid } from 'uid'
 let dateFormat = require("dateformat")
 import db from "@/db"
+import Swal from "sweetalert2";
 export default {
   name: "ProductRelease",
   props: {
@@ -162,6 +163,7 @@ export default {
           book_shipment_date: this.book_shipment_date,
           book_money: this.book_money,
           customer_click_count: 0,
+          seller_status: '上架中',
           release_time: date,
           update_time: date
         })
@@ -177,12 +179,27 @@ export default {
           book_shipment: this.book_shipment,
           book_shipment_date: this.book_shipment_date,
           book_money: this.book_money,
+          release_user_uuid: this.user.uid,
+          customer_click_count: 0,
+          seller_status: '上架中',
           release_time: date,
           update_time: date,
-          release_user_uuid: this.user_uid,
-          customer_click_count: 0
         }).then(function (){
-          location.href = 'release'
+          Swal.fire(
+              '賣家中心訊息',
+              "商品上架成功",
+              'success'
+          ).then(()=>{
+            location.href = 'release'
+          })
+        }).catch(function (){
+          Swal.fire(
+              '賣家中心訊息',
+              "商品上架失敗",
+              'error'
+          ).then(()=>{
+            location.href = 'release'
+          })
         })
       }
     }
