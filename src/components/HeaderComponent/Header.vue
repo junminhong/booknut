@@ -28,6 +28,15 @@ export default {
         this.isSignin = false
       }else if (this.user_name.toString().length != 0){
         this.isSignin = true
+        let profile_img = document.getElementById('profile_header_img');
+        let user = db.auth().currentUser
+        let storageRef_profile_pic = db.storage().ref("profile_pic/" + user.uid + ".jpg")
+        storageRef_profile_pic.getDownloadURL().then( result => {
+          profile_img.src = result
+        })
+        profile_img.onload = function() {
+          URL.revokeObjectURL(profile_img.src)
+        }
       }
     },
     userSignout: function (){

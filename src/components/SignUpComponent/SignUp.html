@@ -25,7 +25,34 @@
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="accept_user" name="accept_user" v-model="accept_user">
-            <a href="#">同意會員政策</a>
+            <a href="#" data-toggle="modal" data-target="#exampleModalLong">同意會員政策</a>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">會員政策</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>本平台會員政策如下：</strong><br>
+                            1. 平台將搜集有關用戶瀏覽、交易等資料(不包含隱私資料)。<br>
+                            2. 平台將保有會員政策隨時修改之權利。<br>
+                            <p></p><strong>Q&A:</strong><br>
+                            Q. 為何要搜集資料？<br>
+                            A: 為給予用戶良好的體驗，本平台會透過數據化的方式，根據個人優化相關平台參數。<br>
+                            <p></p>
+                            Q. 是否可以關閉搜集資料功能？<br>
+                            A: 本平台以保障用戶權益為最終目標，只需要在註冊後至個人資料隱私設定內取消即可。<br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">了解</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div style="text-align: center;">
             <button type="button" @click="signup" :disabled="!accept_user" id="sign_up_btn" class="btn btn-primary" style="text-align: center" >SIGN UP</button>

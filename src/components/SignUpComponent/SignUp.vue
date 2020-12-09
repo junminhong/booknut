@@ -80,14 +80,17 @@ export default {
         db.auth().createUserWithEmailAndPassword(this.user_email, this.user_password).then(
             result => {
               console.log(result)
+              result.user.sendEmailVerification()
+              db.firestore().collection('users').doc(result.user.uid).set({
+                user_name: this.user_name,
+                accept_user: this.accept_user
+              })
               Swal.fire({
                 icon: 'info',
                 title: '註冊訊息',
                 text: '註冊成功，請至信箱驗證，否則無法登入！'
-              })
-              result.user.sendEmailVerification()
-              db.firestore().collection('users').doc(result.user.uid).set({
-                user_name: this.user_name
+              }).then(()=>{
+                location.href = 'signin'
               })
             }
         ).catch(function (error) {

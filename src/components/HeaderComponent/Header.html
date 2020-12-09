@@ -23,15 +23,21 @@
             <a href="/" class="nav-item nav-link active" style="padding-right: 20px;">首頁</a>
             <div class="nav-item dropdown" style="padding-right: 15px;">
                 <a href="old" class="nav-link">交易專區</a>
-<!--                <div class="dropdown-menu">-->
-<!--                    <a href="new" class="dropdown-item">新書專區</a>-->
-<!--                    <a href="old" class="dropdown-item">二手書專區</a>-->
-<!--                </div>-->
+                <!--                <div class="dropdown-menu">-->
+                <!--                    <a href="new" class="dropdown-item">新書專區</a>-->
+                <!--                    <a href="old" class="dropdown-item">二手書專區</a>-->
+                <!--                </div>-->
             </div>
             <a href="discuss" class="nav-item nav-link" style="padding-right: 20px;">討論區</a>
         </div>
         <div class="navbar-nav">
+            <a href="shopcart" class="nav-item nav-link" :hidden="!isSignin" style="margin-right: 15px">
+                <i class="fa fa-bell badge-wrapper" style="font-size: 22px">
+                    <span class='badge badge-secondary'>12{{}}</span>
+                </i>
+            </a>
             <div class="navbar-nav" :hidden="!isSignin">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle z-depth-0" id="profile_header_img" alt="avatar image" style="text-align: center;width: 35px; height: 35px">
                 <li class="nav-item dropdown" style="padding-right: 10px">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{user_name}}
@@ -39,8 +45,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right: 10px">
                         <a class="dropdown-item" href="/profile">個人資料</a>
                         <a class="dropdown-item" href="release">賣家中心</a>
-                        <a class="dropdown-item" href="release">購買中心</a>
-                        <a class="dropdown-item" href="release">物流中心</a>
+                        <a class="dropdown-item" href="release">訂單查詢</a>
                         <a class="dropdown-item" href="#">常見問題</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" @click="userSignout">登出</a>

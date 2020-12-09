@@ -29,9 +29,34 @@
                                 <span class="user-link">{{doc.book_name}}</span>
                                 <span class="user-subhead">{{doc.book_isbn}}</span>
                             </td>
-                            <td>
-                                2013/08/08
+                            <td class="text-center" v-if="doc.book_classification === 'exam_book'">
+                                <span class="badge bg-secondary text-light">考試用書</span>
                             </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'professional_book'">
+                                <span class="badge bg-secondary text-light">專業教科書</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'computer_book'">
+                                <span class="badge bg-secondary text-light">語言電腦</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'religious_humanities_book'">
+                                <span class="badge bg-secondary text-light">宗教人文</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'art_design_book'">
+                                <span class="badge bg-secondary text-light">藝術設計</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'travel_fool_book'">
+                                <span class="badge bg-secondary text-light">旅遊飲食</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'parent_child_book'">
+                                <span class="badge bg-secondary text-light">親子童書</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.book_classification === 'comic_novel_book'">
+                                <span class="badge bg-secondary text-light">漫畫小說</span>
+                            </td>
+                            <td class="text-center" v-else="doc.book_classification === 'business_finance_book'">
+                                <span class="badge bg-secondary text-light">商業理財</span>
+                            </td>
+
                             <td class="text-center" v-if="doc.book_status === 'new'">
                                 <span class="badge badge-success">全新未拆</span>
                             </td>

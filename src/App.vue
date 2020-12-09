@@ -27,8 +27,7 @@ export default {
   methods: {
     checkUserStatus: function (){
       db.auth().onAuthStateChanged(user =>{
-        if (user != null){
-          console.log(user)
+        if (user != null && user.emailVerified){
           this.user_uid = user.uid
           this.user = user
           db.firestore().collection('users').doc(this.user_uid).get().then(doc=>{
@@ -37,9 +36,11 @@ export default {
             }
           }).catch( error => {
             console.log(error)
-            console.log(this.user_uid)
             db.firestore().collection('users').doc(this.user_uid).set({
-              user_name: 'booknut'
+              user_name: 'booknut',
+              accept_user: true
+            }).then(()=>{
+              location.href = '/'
             })
           })
         }else{
@@ -49,8 +50,6 @@ export default {
       })
       db.auth().getRedirectResult().then(function(result) {
         if (result.credential) {
-          console.log(result.credential.accessToken)
-          console.log(result.user)
           // Swal.fire("成功")
           location.href = '/'
         }

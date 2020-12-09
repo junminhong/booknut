@@ -59,6 +59,17 @@ export default {
             location.href = '/'
           }
       )
+    },
+    forgetPassword: function (){
+      if (this.user_email === ''){
+        Swal.fire(
+            "忘記密碼訊息",
+            "電子信箱欄位請勿為空",
+            "info"
+        )
+      }else{
+        db.auth().sendPasswordResetEmail(this.user_email)
+      }
     }
   }
 }

@@ -11,7 +11,7 @@
                     <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general" @click="generalType">一般</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password" @click="changePasswordType">密碼變更</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info" @click="realVerificationType">實名認證</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">社群帳號設定</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links" @click="socialAccountType">社群帳號設定</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">帳號連動設定</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">電子錢包</a>
                 </div>
@@ -74,29 +74,35 @@
 
                         </div>
                     </div>
-
                     <div class="tab-pane fade" id="account-info">
+                        <div class="alert alert-warning" role="alert">
+                            實名認證目的在於保障平台內會員權益，所以資料再填寫送出後即不可再更改，請謹慎填寫，感謝您的配合。
+                        </div>
                         <div class="card-body pb-2">
                             <h3>基本資料</h3>
                             <hr class="border-light m-0">
                             <div class="form-group">
                                 <label class="form-label">*真實姓名</label>
-                                <input type="text" v-model="user_real_name" class="form-control" placeholder="ex: 王小明">
+                                <input type="text" v-model="user_real_name" class="form-control" :disabled="is_have_user_real_data" placeholder="ex: 王小明">
+                                <div style="color: red"><small>{{user_real_name_error_msg}}</small></div>
                             </div>
                             <div class="form-group form-check form-check-inline">
                                 <label class="form-label">*性別：</label>
-                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" type="radio" name="inlineRadioOptions" id="male_option" value="0">
+                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" :disabled="is_have_user_real_data" type="radio" checked="true" name="inlineRadioOptions" id="male_option" value="0">
                                 <label class="form-check-label" style="margin-top: -10px;" for="male_option">男</label>
-                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" type="radio" name="inlineRadioOptions" id="female_option" value="1">
+                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" :disabled="is_have_user_real_data" type="radio" name="inlineRadioOptions" id="female_option" value="1">
                                 <label class="form-check-label" style="margin-top: -10px;" for="female_option">女</label>
                             </div>
+
                             <div class="form-group">
                                 <label class="form-label">*生日</label>
-                                <input type="date" class="form-control" v-model="user_birthday">
+                                <input type="date" class="form-control" v-model="user_birthday" :disabled="is_have_user_real_data">
+                                <div style="color: red"><small>{{user_birthday_error_msg}}</small></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">*地址</label>
-                                <input type="text" class="form-control" placeholder="ex: 71005台南市永康區南台街一號" v-model="user_address">
+                                <input type="text" class="form-control" placeholder="ex: 71005台南市永康區南台街一號" v-model="user_address" :disabled="is_have_user_real_data">
+                                <div style="color: red"><small>{{user_address_error_msg}}</small></div>
                                 <!--                                <select class="custom-select">-->
                                 <!--                                    <option>USA</option>-->
                                 <!--                                    <option selected="">Canada</option>-->
@@ -111,21 +117,32 @@
                             <h3 class="mb-4">進階認證</h3>
                             <div class="form-group">
                                 <label class="form-label">電話(手機)</label>
-                                <input type="text" class="form-control" placeholder="ex: 09xxxxxxx" value="">
+                                <input type="text" :class="{'form-control': true, 'is-valid': is_have_user_phone_number}" :disabled="is_have_user_phone_number" placeholder="ex: 09xxxxxxx" v-model="user_phone">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <button type="button" id="send_sms" :hidden="is_have_user_phone_number" class="btn btn-secondary" :disabled="can_resend_sms_btn" @click="sendVerificationPhone">{{send_sms_msg}}</button>
+                                    </div>
+                                    <input type="text" class="form-control" :hidden="id_send_sms" style="margin-left: 10px" placeholder="驗證碼" v-model="verification_code">
+                                    <div class="input-group-append">
+                                        <button type="button" id="verification_sms" :hidden="id_send_sms" class="btn btn-secondary" @click="verificationPhone">確認</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">身分證</label>
-                                <input type="text" class="form-control" disabled="true" placeholder="ex: Lxxxxxxxx" v-model="user_id_number" >
-                                <label class="btn btn-outline-primary" style="margin-top: 10px">
+                                <label class="form-label">身份證</label>
+                                <input type="text" :class="{'form-control': true, 'is-valid': user_id_number_is_ok}" disabled="true" placeholder="ex: Lxxxxxxxx" v-model="user_id_number" >
+                                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                                <label class="btn btn-outline-primary" :hidden="is_have_user_real_data" style="margin-top: 10px">
                                     上傳身分證
-                                    <input type="file" @change="convertBlobImg" class="account-settings-fileinput">
+                                    <input type="file" @change="convertBlobImg"  class="account-settings-fileinput">
                                 </label>
-                                <div class="text-light small mt-1">允許JPG、PNG圖片格式，上限1MB</div>
+                                <div class="text-light small mt-1">允許JPG、PNG圖片格式，上限1MB，系統不會保留身份證，請放心上傳</div>
+                                <div style="color: red"><small>{{user_id_number_error_msg}}</small></div>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">簡述自己(加快認證)</label>
-                                <textarea class="form-control" rows="5" placeholder="為什麼要使用本平台?"></textarea>
-                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label class="form-label">簡述自己(加快認證)</label>-->
+<!--                                <textarea class="form-control" rows="5" placeholder="為什麼要使用本平台?"></textarea>-->
+<!--                            </div>-->
                         </div>
                     </div>
                     <div class="tab-pane fade" id="account-social-links">
@@ -133,48 +150,49 @@
 
                             <div class="form-group">
                                 <label class="form-label">Twitter</label>
-                                <input type="text" class="form-control" value="">
+                                <input type="text" class="form-control" v-model="user_twitter_website">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Facebook</label>
-                                <input type="text" class="form-control" value="">
+                                <input type="text" class="form-control" v-model="user_facebook_website">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Google+</label>
-                                <input type="text" class="form-control" value="">
+                                <input type="text" class="form-control" v-model="user_google_plus_website">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">LinkedIn</label>
-                                <input type="text" class="form-control" value="">
+                                <input type="text" class="form-control" v-model="user_linkedin_website">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Instagram</label>
-                                <input type="text" class="form-control" value="">
+                                <input type="text" class="form-control" v-model="user_instagram_website">
                             </div>
 
                         </div>
                     </div>
                     <div class="tab-pane fade" id="account-connections">
-                        <div class="card-body">
-                            <button type="button" class="btn btn-twitter">Connect to <strong>Twitter</strong></button>
+                        <div class="alert alert-info" role="alert">
+                            Coming Soon
                         </div>
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-twitter">Connect to <strong>Twitter</strong></button>-->
+<!--                        </div>-->
                         <hr class="border-light m-0">
                         <div class="card-body">
                             <h5 class="mb-2">
-                                <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i class="ion ion-md-close"></i> Remove</a>
-                                <i class="ion ion-logo-google text-google"></i>
-                                You are connected to Google:
+                                已綁定手機號碼:  {{user_phone}}
+                               <button type="button" class="btn btn-facebook float-right ">解除綁定</button>
                             </h5>
-                            nmaxwell@mail.com
                         </div>
-                        <hr class="border-light m-0">
-                        <div class="card-body">
-                            <button type="button" class="btn btn-facebook">Connect to <strong>Facebook</strong></button>
-                        </div>
-                        <hr class="border-light m-0">
-                        <div class="card-body">
-                            <button type="button" class="btn btn-instagram">Connect to <strong>Instagram</strong></button>
-                        </div>
+<!--                        <hr class="border-light m-0">-->
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-facebook">Connect to <strong>Facebook</strong></button>-->
+<!--                        </div>-->
+<!--                        <hr class="border-light m-0">-->
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-instagram">Connect to <strong>Instagram</strong></button>-->
+<!--                        </div>-->
                     </div>
                     <div class="tab-pane fade" id="account-notifications">
                         <div class="card-body pb-2">
@@ -183,7 +201,7 @@
 
                             <div class="form-group">
                                 <label class="form-label">堅果幣電子錢包地址</label>
-                                <input type="text" class="form-control" :disabled="true" value="日後新增">
+                                <input type="text" class="form-control" :disabled="true" v-model="user_bunt_wallet_address">
 <!--                                <label class="switcher">-->
 <!--                                    <input type="checkbox" class="switcher-input" checked="">-->
 <!--                                    <span class="switcher-indicator">-->
@@ -195,7 +213,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">信用卡</label>
-                                <input type="text" class="form-control" placeholder="ex: xxxxxx card number" value="" >
+                                <input type="text" class="form-control" :disabled="true" placeholder="ex: xxxxxx card number" value="Coming Soon" >
                                 <label class="btn btn-outline-primary" style="margin-top: 10px">
                                     新增
                                     <input type="button" class="account-settings-fileinput">
