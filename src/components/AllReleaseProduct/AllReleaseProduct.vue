@@ -21,11 +21,13 @@ export default {
       book_money: '',
       all_doc_data: [],
       total_index: '',
+      product_id: ''
     }
   },
   props: {
     user: Object,
   },
+
   watch: {
     user: [{
       handler: 'showAllReleaseProduct'
@@ -34,20 +36,19 @@ export default {
   methods:{
     showAllReleaseProduct: function (){
       db.firestore().collection("users").doc(this.user.uid).collection("release_product").get().then(all_doc=>{
-        let doc_data = [];
+        let all_doc_data = []
         all_doc.forEach(doc=>{
-          doc_data.push(doc.data())
+          all_doc_data.push(doc)
         })
-        this.all_doc_data = doc_data
-        if (doc_data.length < 10){
+        this.all_doc_data = all_doc_data
+        if (all_doc_data.length < 10){
           this.total_index = 1
         }else{
-          this.total_index = doc_data.length / 10
+          this.total_index = all_doc_data.length / 10
         }
 
       })
-
-    }
+    },
   }
 }
 </script>

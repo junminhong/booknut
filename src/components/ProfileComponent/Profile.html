@@ -13,7 +13,7 @@
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info" @click="realVerificationType">實名認證</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links" @click="socialAccountType">社群帳號設定</a>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">帳號連動設定</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">電子錢包</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications" @click="privacyType">電子錢包</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -117,8 +117,8 @@
                             <h3 class="mb-4">進階認證</h3>
                             <div class="form-group">
                                 <label class="form-label">電話(手機)</label>
-                                <input type="text" :class="{'form-control': true, 'is-valid': is_have_user_phone_number}" :disabled="is_have_user_phone_number" placeholder="ex: 09xxxxxxx" v-model="user_phone">
                                 <div class="input-group">
+                                    <input type="text" :class="{'form-control': true, 'is-valid': is_have_user_phone_number}" :disabled="is_have_user_phone_number" placeholder="ex: 09xxxxxxx" v-model="user_phone">
                                     <div class="input-group-append">
                                         <button type="button" id="send_sms" :hidden="is_have_user_phone_number" class="btn btn-secondary" :disabled="can_resend_sms_btn" @click="sendVerificationPhone">{{send_sms_msg}}</button>
                                     </div>
@@ -172,18 +172,16 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="account-connections">
-                        <div class="alert alert-info" role="alert">
-                            Coming Soon
+                        <div class="alert alert-warning" role="alert">
+                            手機解完綁定後請盡快綁定新手機，否則將會影響自身權益
                         </div>
 <!--                        <div class="card-body">-->
 <!--                            <button type="button" class="btn btn-twitter">Connect to <strong>Twitter</strong></button>-->
 <!--                        </div>-->
                         <hr class="border-light m-0">
-                        <div class="card-body">
-                            <h5 class="mb-2">
-                                已綁定手機號碼:  {{user_phone}}
-                               <button type="button" class="btn btn-facebook float-right ">解除綁定</button>
-                            </h5>
+                        <div class="row" style="margin-right: 0px;margin-left: 0px">
+                            <div class="col-8"><h5 class="mb-2">已綁定手機號碼:  {{user_phone}}</h5></div>
+                            <div class="col-4" ><button type="button" class="btn btn-facebook float-right" @click="removePhoneNumber">解除綁定</button></div>
                         </div>
 <!--                        <hr class="border-light m-0">-->
 <!--                        <div class="card-body">-->
@@ -233,7 +231,7 @@
                             <h6 class="mb-4">隱私權設定</h6>
                             <div class="form-group">
                                 <label class="switcher">
-                                    <input type="checkbox" class="switcher-input" checked="true">
+                                    <input type="checkbox" class="switcher-input" v-model="accept_user">
                                     <span class="switcher-indicator">
                                       <span class="switcher-yes"></span>
                                       <span class="switcher-no"></span>

@@ -48,9 +48,9 @@ export default {
       // 信用卡應該可以設多張但現階段為一張
       user_card_number: '',
       // 隱私權設定 = 通知設定
-      collect_user_info: '',
+      accept_user: '',
       new_and_old_system_notify: '',
-      socail_system_notify: '',
+      social_system_notify: '',
       type: 'general',
       user_id_number_is_ok: false,
       verification_code: '',
@@ -64,6 +64,7 @@ export default {
     }
   },
   mounted() {
+
   },
   watch: {
     user: [{
@@ -82,6 +83,7 @@ export default {
         this.user_linkedin_website = user.data().user_linkedin_website
         this.user_instagram_website = user.data().user_instagram_website
         this.user_bunt_wallet_address = user.data().user_bunt_wallet_address
+        this.accept_user = user.data().accept_user
       })
       let profile_img = document.getElementById('profile_img');
       let storageRef_profile_pic = db.storage().ref("profile_pic/" + this.user.uid + ".jpg")
@@ -128,6 +130,9 @@ export default {
     socialAccountType: function (){
       this.type = "socialist"
     },
+    privacyType: function (){
+      this.type = "privacy"
+    },
     sendVerificationPhone: function (){
       if (this.user_phone === ''){
         Swal.fire(
@@ -140,17 +145,17 @@ export default {
           console.log('寄送驗證碼')
           db.auth().useDeviceLanguage();
           let appVerifier = window.recaptchaVerifier
-          let taiwan_phone_number = '0' + this.user_phone.slice(4, 14)
+          let taiwan_phone_number = '+886' + this.user_phone.slice(1, 10)
           console.log(taiwan_phone_number)
-          this.timer = setInterval(this.SmsTimeOut, 1000);
-          this.can_resend_sms_btn = true
-          this.id_send_sms = false
           db.auth().currentUser.linkWithPhoneNumber(taiwan_phone_number, appVerifier)
-              .then(function (confirmationResult) {
+              .then(confirmationResult => {
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 console.log(confirmationResult)
                 window.confirmationResult = confirmationResult;
+                this.timer = setInterval(this.SmsTimeOut, 1000);
+                this.can_resend_sms_btn = true
+                this.id_send_sms = false
               }).catch( error => {
             console.log(error)
             Swal.fire(
@@ -171,9 +176,6 @@ export default {
       this.id_send_sms = true
       this.resend_sms_msg_count = 60
       this.send_sms_msg = '寄送驗證碼'
-      window.recaptchaVerifier.render().then(function(widgetId) {
-        window.recaptchaVerifier.reset(widgetId);
-      })
     },
     SmsTimeOut:function (){
       console.log(this.can_resend_sms_btn)
@@ -199,6 +201,8 @@ export default {
               '手機認證成功，感謝您的配合',
               'success'
           )
+          this.is_have_user_phone_number = true
+          this.verification_code = ''
           this.resetSms()
           // ...
         }).catch(error => {
@@ -217,9 +221,11 @@ export default {
     realVerificationType: function (){
       this.type = "real_verification"
       let user = db.auth().currentUser;
-      if (this.user.phoneNumber !== ''){
+      console.log(this.user.phoneNumber)
+      if (this.user.phoneNumber !== '' && this.user.phoneNumber !== null){
         let taiwan_phone_number = '0' + this.user.phoneNumber.slice(4, 14)
         this.user_phone = taiwan_phone_number
+        this.is_have_user_phone_number = true
       }
       db.firestore().collection("users").doc(user.uid).get().then(resault => {
         if(resault.data().user_real_name === undefined){
@@ -232,7 +238,6 @@ export default {
           this.user_id_number = resault.data().user_id_number
           this.can_create_user_real_data = false
           this.user_id_number_is_ok = true
-          this.is_have_user_phone_number = true
           this.is_have_user_real_data = true
         }
       })
@@ -298,19 +303,36 @@ export default {
       return user_data.reauthenticateWithCredential(cred)
     },
     saveProfile: function (){
-      switch (this.type){
-        case "change_password":
-          if (this.user_new_password === this.user_new_confirm_password){
-            let user_new_confirm_password = this.user_new_confirm_password
-            this.reauthenticate().then(() => {
-              let user = db.auth().currentUser;
-              user.updatePassword(user_new_confirm_password).then(() => {
-                Swal.fire(
-                    '變更密碼訊息',
-                    "已成功變更密碼",
-                    'success'
-                )
-                console.log("Password updated!");
+      Swal.fire({
+        title: '儲存設定訊息',
+        text: "確定要儲存設定嗎？",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'}).then(()=>{
+        switch (this.type){
+          case "change_password":
+            if (this.user_new_password === this.user_new_confirm_password){
+              let user_new_confirm_password = this.user_new_confirm_password
+              this.reauthenticate().then(() => {
+                let user = db.auth().currentUser;
+                user.updatePassword(user_new_confirm_password).then(() => {
+                  Swal.fire(
+                      '變更密碼訊息',
+                      "已成功變更密碼",
+                      'success'
+                  )
+                  console.log("Password updated!");
+                }).catch((error) => {
+                  Swal.fire(
+                      '變更密碼訊息',
+                      error.message,
+                      'error'
+                  )
+                  console.log(error.message)
+                });
               }).catch((error) => {
                 Swal.fire(
                     '變更密碼訊息',
@@ -319,106 +341,140 @@ export default {
                 )
                 console.log(error.message)
               });
-            }).catch((error) => {
-              Swal.fire(
-                  '變更密碼訊息',
-                  error.message,
-                  'error'
-              )
-              console.log(error.message)
-            });
-          }
-          this.user_old_password = ''
-          this.user_new_confirm_password = ''
-          this.user_new_password = ''
-          break
-        case "general":
-          db.firestore().collection("users").doc(this.user.uid).update({
-            user_name: this.user_name,
-          }).then(() => {
-            Swal.fire(
-                '變更暱稱訊息',
-                "已成功變更暱稱",
-                'success'
-            ).then(()=>{
-              location.href = 'profile'
-            })
-          })
-          break
-        case "socialist":
-          db.firestore().collection("users").doc(this.user.uid).update({
-            user_twitter_website: this.user_twitter_website,
-            user_facebook_website: this.user_facebook_website,
-            user_google_plus_website: this.user_google_plus_website,
-            user_linkedin_website: this.user_linkedin_website,
-            user_instagram_website: this.user_instagram_website,
-          }).then(() => {
-            Swal.fire(
-                '社群帳號設定訊息',
-                "社群帳號已設定成功",
-                'success'
-            )
-          }).catch(()=>{
-            Swal.fire(
-                '社群帳號設定訊息',
-                "社群帳號設定失敗",
-                'error'
-            )
-          })
-          break
-        case "real_verification":
-          this.can_create_user_real_data = true
-          if (this.user_real_name === ''){
-            this.user_real_name_error_msg = '真實姓名請勿為空'
-            this.can_create_user_real_data = false
-          }
-          if (this.user_gender === ''){
-            this.user_gender_error_msg = '性別請勿為空'
-            this.can_create_user_real_data = false
-          }
-          if (this.user_birthday === ''){
-            this.user_birthday_error_msg = '生日請勿為空'
-            this.can_create_user_real_data = false
-          }
-          if (this.user_address === ''){
-            this.user_address_error_msg = '地址請勿為空'
-            this.can_create_user_real_data = false
-          }
-          if (this.user_id_number === ''){
-            this.user_id_number_error_msg = '請上傳身份證驗證'
-            this.can_create_user_real_data = false
-          }
-          if (this.can_create_user_real_data){
-            console.log(this.user.uid)
+            }
+            this.user_old_password = ''
+            this.user_new_confirm_password = ''
+            this.user_new_password = ''
+            break
+          case "general":
             db.firestore().collection("users").doc(this.user.uid).update({
-              user_real_name: this.user_real_name,
-              user_gender: this.user_gender,
-              user_birthday: this.user_birthday,
-              user_address: this.user_address,
-              user_id_number: this.user_id_number,
-              user_bunt_wallet_address: uid(128)
+              user_name: this.user_name,
             }).then(() => {
               Swal.fire(
-                  '進階認證訊息',
-                  "進階認證已驗證成功",
+                  '變更暱稱訊息',
+                  "已成功變更暱稱",
+                  'success'
+              ).then(()=>{
+                location.href = 'profile'
+              })
+            })
+            break
+          case "socialist":
+            db.firestore().collection("users").doc(this.user.uid).update({
+              user_twitter_website: this.user_twitter_website,
+              user_facebook_website: this.user_facebook_website,
+              user_google_plus_website: this.user_google_plus_website,
+              user_linkedin_website: this.user_linkedin_website,
+              user_instagram_website: this.user_instagram_website,
+            }).then(() => {
+              Swal.fire(
+                  '社群帳號設定訊息',
+                  "社群帳號已設定成功",
                   'success'
               )
-              this.is_have_user_real_data = true
-              this.user_id_number_is_ok = true
-              this.user_real_name_error_msg = ''
-              this.user_gender_error_msg = ''
-              this.user_birthday_error_msg = ''
-              this.user_address_error_msg = ''
             }).catch(()=>{
               Swal.fire(
-                  '進階認證訊息',
-                  "進階認證驗證失敗",
+                  '社群帳號設定訊息',
+                  "社群帳號設定失敗",
                   'error'
               )
             })
-          }
-          break
-      }
+            break
+          case "real_verification":
+            this.can_create_user_real_data = true
+            if (this.user_real_name === ''){
+              this.user_real_name_error_msg = '真實姓名請勿為空'
+              this.can_create_user_real_data = false
+            }
+            if (this.user_gender === ''){
+              this.user_gender_error_msg = '性別請勿為空'
+              this.can_create_user_real_data = false
+            }
+            if (this.user_birthday === ''){
+              this.user_birthday_error_msg = '生日請勿為空'
+              this.can_create_user_real_data = false
+            }
+            if (this.user_address === ''){
+              this.user_address_error_msg = '地址請勿為空'
+              this.can_create_user_real_data = false
+            }
+            if (this.user_id_number === ''){
+              this.user_id_number_error_msg = '請上傳身份證驗證'
+              this.can_create_user_real_data = false
+            }
+            if (this.can_create_user_real_data){
+              console.log(this.user.uid)
+              db.firestore().collection("users").doc(this.user.uid).update({
+                user_real_name: this.user_real_name,
+                user_gender: this.user_gender,
+                user_birthday: this.user_birthday,
+                user_address: this.user_address,
+                user_id_number: this.user_id_number,
+                user_bunt_wallet_address: uid(128),
+                user_bunt_wallet_money: 0
+              }).then(() => {
+                Swal.fire(
+                    '進階認證訊息',
+                    "進階認證已驗證成功",
+                    'success'
+                )
+                this.is_have_user_real_data = true
+                this.user_id_number_is_ok = true
+                this.user_real_name_error_msg = ''
+                this.user_gender_error_msg = ''
+                this.user_birthday_error_msg = ''
+                this.user_address_error_msg = ''
+              }).catch(()=>{
+                Swal.fire(
+                    '進階認證訊息',
+                    "進階認證驗證失敗",
+                    'error'
+                )
+              })
+            }
+            break
+          case "privacy":
+            db.firestore().collection("users").doc(this.user.uid).update({
+              accept_user: this.accept_user,
+            }).then(()=>{
+              Swal.fire("儲存設定訊息", "儲存設定成功", "success")
+            })
+            break
+        }
+      })
+
+    },
+    removePhoneNumber: function (){
+      Swal.fire({
+        title: '解除綁定訊息',
+        text: "確定要移除手機綁定嗎？",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '移除',
+        cancelButtonText: '取消'
+      }).then(()=> {
+        if (this.user_phone === '') {
+          Swal.fire(
+              "解除綁定訊息",
+              "尚未綁定任何手機",
+              "info"
+          )
+        } else {
+          let phone_provider = db.auth.PhoneAuthProvider.PROVIDER_ID
+          db.auth().currentUser.unlink(phone_provider).then(result => {
+            console.log(result)
+            Swal.fire(
+                "解除綁定訊息",
+                "手機綁定已解除",
+                "success"
+            )
+            this.is_have_user_phone_number = false
+            this.user_phone = ''
+          })
+        }
+      })
     }
   }
 }
