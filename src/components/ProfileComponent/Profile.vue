@@ -311,136 +311,138 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: '確定',
-        cancelButtonText: '取消'}).then(()=>{
-        switch (this.type){
-          case "change_password":
-            if (this.user_new_password === this.user_new_confirm_password){
-              let user_new_confirm_password = this.user_new_confirm_password
-              this.reauthenticate().then(() => {
-                let user = db.auth().currentUser;
-                user.updatePassword(user_new_confirm_password).then(() => {
+        cancelButtonText: '取消'}).then(result=>{
+          if(result.isConfirmed){
+            switch (this.type){
+              case "change_password":
+                if (this.user_new_password === this.user_new_confirm_password){
+                  let user_new_confirm_password = this.user_new_confirm_password
+                  this.reauthenticate().then(() => {
+                    let user = db.auth().currentUser;
+                    user.updatePassword(user_new_confirm_password).then(() => {
+                      Swal.fire(
+                          '變更密碼訊息',
+                          "已成功變更密碼",
+                          'success'
+                      )
+                      console.log("Password updated!");
+                    }).catch((error) => {
+                      Swal.fire(
+                          '變更密碼訊息',
+                          error.message,
+                          'error'
+                      )
+                      console.log(error.message)
+                    });
+                  }).catch((error) => {
+                    Swal.fire(
+                        '變更密碼訊息',
+                        error.message,
+                        'error'
+                    )
+                    console.log(error.message)
+                  });
+                }
+                this.user_old_password = ''
+                this.user_new_confirm_password = ''
+                this.user_new_password = ''
+                break
+              case "general":
+                db.firestore().collection("users").doc(this.user.uid).update({
+                  user_name: this.user_name,
+                }).then(() => {
                   Swal.fire(
-                      '變更密碼訊息',
-                      "已成功變更密碼",
+                      '變更暱稱訊息',
+                      "已成功變更暱稱",
+                      'success'
+                  ).then(()=>{
+                    location.href = 'profile'
+                  })
+                })
+                break
+              case "socialist":
+                db.firestore().collection("users").doc(this.user.uid).update({
+                  user_twitter_website: this.user_twitter_website,
+                  user_facebook_website: this.user_facebook_website,
+                  user_google_plus_website: this.user_google_plus_website,
+                  user_linkedin_website: this.user_linkedin_website,
+                  user_instagram_website: this.user_instagram_website,
+                }).then(() => {
+                  Swal.fire(
+                      '社群帳號設定訊息',
+                      "社群帳號已設定成功",
                       'success'
                   )
-                  console.log("Password updated!");
-                }).catch((error) => {
+                }).catch(()=>{
                   Swal.fire(
-                      '變更密碼訊息',
-                      error.message,
+                      '社群帳號設定訊息',
+                      "社群帳號設定失敗",
                       'error'
                   )
-                  console.log(error.message)
-                });
-              }).catch((error) => {
-                Swal.fire(
-                    '變更密碼訊息',
-                    error.message,
-                    'error'
-                )
-                console.log(error.message)
-              });
+                })
+                break
+              case "real_verification":
+                this.can_create_user_real_data = true
+                if (this.user_real_name === ''){
+                  this.user_real_name_error_msg = '真實姓名請勿為空'
+                  this.can_create_user_real_data = false
+                }
+                if (this.user_gender === ''){
+                  this.user_gender_error_msg = '性別請勿為空'
+                  this.can_create_user_real_data = false
+                }
+                if (this.user_birthday === ''){
+                  this.user_birthday_error_msg = '生日請勿為空'
+                  this.can_create_user_real_data = false
+                }
+                if (this.user_address === ''){
+                  this.user_address_error_msg = '地址請勿為空'
+                  this.can_create_user_real_data = false
+                }
+                if (this.user_id_number === ''){
+                  this.user_id_number_error_msg = '請上傳身份證驗證'
+                  this.can_create_user_real_data = false
+                }
+                if (this.can_create_user_real_data){
+                  console.log(this.user.uid)
+                  db.firestore().collection("users").doc(this.user.uid).update({
+                    user_real_name: this.user_real_name,
+                    user_gender: this.user_gender,
+                    user_birthday: this.user_birthday,
+                    user_address: this.user_address,
+                    user_id_number: this.user_id_number,
+                    user_bunt_wallet_address: uid(128),
+                    user_bunt_wallet_money: 0
+                  }).then(() => {
+                    Swal.fire(
+                        '進階認證訊息',
+                        "進階認證已驗證成功",
+                        'success'
+                    )
+                    this.is_have_user_real_data = true
+                    this.user_id_number_is_ok = true
+                    this.user_real_name_error_msg = ''
+                    this.user_gender_error_msg = ''
+                    this.user_birthday_error_msg = ''
+                    this.user_address_error_msg = ''
+                  }).catch(()=>{
+                    Swal.fire(
+                        '進階認證訊息',
+                        "進階認證驗證失敗",
+                        'error'
+                    )
+                  })
+                }
+                break
+              case "privacy":
+                db.firestore().collection("users").doc(this.user.uid).update({
+                  accept_user: this.accept_user,
+                }).then(()=>{
+                  Swal.fire("儲存設定訊息", "儲存設定成功", "success")
+                })
+                break
             }
-            this.user_old_password = ''
-            this.user_new_confirm_password = ''
-            this.user_new_password = ''
-            break
-          case "general":
-            db.firestore().collection("users").doc(this.user.uid).update({
-              user_name: this.user_name,
-            }).then(() => {
-              Swal.fire(
-                  '變更暱稱訊息',
-                  "已成功變更暱稱",
-                  'success'
-              ).then(()=>{
-                location.href = 'profile'
-              })
-            })
-            break
-          case "socialist":
-            db.firestore().collection("users").doc(this.user.uid).update({
-              user_twitter_website: this.user_twitter_website,
-              user_facebook_website: this.user_facebook_website,
-              user_google_plus_website: this.user_google_plus_website,
-              user_linkedin_website: this.user_linkedin_website,
-              user_instagram_website: this.user_instagram_website,
-            }).then(() => {
-              Swal.fire(
-                  '社群帳號設定訊息',
-                  "社群帳號已設定成功",
-                  'success'
-              )
-            }).catch(()=>{
-              Swal.fire(
-                  '社群帳號設定訊息',
-                  "社群帳號設定失敗",
-                  'error'
-              )
-            })
-            break
-          case "real_verification":
-            this.can_create_user_real_data = true
-            if (this.user_real_name === ''){
-              this.user_real_name_error_msg = '真實姓名請勿為空'
-              this.can_create_user_real_data = false
-            }
-            if (this.user_gender === ''){
-              this.user_gender_error_msg = '性別請勿為空'
-              this.can_create_user_real_data = false
-            }
-            if (this.user_birthday === ''){
-              this.user_birthday_error_msg = '生日請勿為空'
-              this.can_create_user_real_data = false
-            }
-            if (this.user_address === ''){
-              this.user_address_error_msg = '地址請勿為空'
-              this.can_create_user_real_data = false
-            }
-            if (this.user_id_number === ''){
-              this.user_id_number_error_msg = '請上傳身份證驗證'
-              this.can_create_user_real_data = false
-            }
-            if (this.can_create_user_real_data){
-              console.log(this.user.uid)
-              db.firestore().collection("users").doc(this.user.uid).update({
-                user_real_name: this.user_real_name,
-                user_gender: this.user_gender,
-                user_birthday: this.user_birthday,
-                user_address: this.user_address,
-                user_id_number: this.user_id_number,
-                user_bunt_wallet_address: uid(128),
-                user_bunt_wallet_money: 0
-              }).then(() => {
-                Swal.fire(
-                    '進階認證訊息',
-                    "進階認證已驗證成功",
-                    'success'
-                )
-                this.is_have_user_real_data = true
-                this.user_id_number_is_ok = true
-                this.user_real_name_error_msg = ''
-                this.user_gender_error_msg = ''
-                this.user_birthday_error_msg = ''
-                this.user_address_error_msg = ''
-              }).catch(()=>{
-                Swal.fire(
-                    '進階認證訊息',
-                    "進階認證驗證失敗",
-                    'error'
-                )
-              })
-            }
-            break
-          case "privacy":
-            db.firestore().collection("users").doc(this.user.uid).update({
-              accept_user: this.accept_user,
-            }).then(()=>{
-              Swal.fire("儲存設定訊息", "儲存設定成功", "success")
-            })
-            break
-        }
+          }
       })
 
     },
@@ -454,25 +456,27 @@ export default {
         cancelButtonColor: '#d33',
         confirmButtonText: '移除',
         cancelButtonText: '取消'
-      }).then(()=> {
-        if (this.user_phone === '') {
-          Swal.fire(
-              "解除綁定訊息",
-              "尚未綁定任何手機",
-              "info"
-          )
-        } else {
-          let phone_provider = db.auth.PhoneAuthProvider.PROVIDER_ID
-          db.auth().currentUser.unlink(phone_provider).then(result => {
-            console.log(result)
+      }).then(result=> {
+        if (result.isConfirmed){
+          if (this.user_phone === '') {
             Swal.fire(
                 "解除綁定訊息",
-                "手機綁定已解除",
-                "success"
+                "尚未綁定任何手機",
+                "info"
             )
-            this.is_have_user_phone_number = false
-            this.user_phone = ''
-          })
+          } else {
+            let phone_provider = db.auth.PhoneAuthProvider.PROVIDER_ID
+            db.auth().currentUser.unlink(phone_provider).then(result => {
+              console.log(result)
+              Swal.fire(
+                  "解除綁定訊息",
+                  "手機綁定已解除",
+                  "success"
+              )
+              this.is_have_user_phone_number = false
+              this.user_phone = ''
+            })
+          }
         }
       })
     }

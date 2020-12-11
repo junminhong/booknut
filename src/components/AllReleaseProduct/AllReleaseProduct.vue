@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import db from "@/db";
+import db from "@/db"
+import Swal from 'sweetalert2'
 export default {
   name: "AllReleaseProduct",
   data(){
@@ -21,7 +22,9 @@ export default {
       book_money: '',
       all_doc_data: [],
       total_index: '',
-      product_id: ''
+      product_id: '',
+      storageRef_one_result: '',
+      storageRef_two_result: ''
     }
   },
   props: {
@@ -49,6 +52,34 @@ export default {
 
       })
     },
+    removeProduct: function (product_id, book_classification){
+      Swal.fire({
+        title: '賣場中心訊息',
+        text: "是否要移除商品？",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'}).then(result=>{
+          if (result.isConfirmed) {
+            console.log(product_id)
+            let storageRef_one = db.storage().ref("release_product_pic/" + book_classification + "/" + product_id + "1.jpg")
+            let storageRef_two = db.storage().ref("release_product_pic/" + book_classification + "/" + product_id + "2.jpg")
+            storageRef_one.delete().then( () => {
+            }).then(()=> {
+              storageRef_two.delete().then(() => {
+              }).then(()=>{
+                db.firestore().collection("users").doc(this.user.uid).collection("release_product").doc(product_id).delete().then(()=>{
+                  db.firestore().collection("market_books").doc(book_classification).collection("release_product").doc(product_id).delete().then(()=>{
+                  })
+                })
+              })
+            })
+          }
+
+      })
+    }
   }
 }
 </script>

@@ -20,7 +20,9 @@ export default {
       book_shipment_date: '',
       book_money: '',
       querySnapshot: '',
-      all_doc_data: ''
+      all_doc_data: '',
+      sort_type: 'list',
+      classification_type: 'exam_book',
     }
   },
   mounted() {
@@ -31,15 +33,49 @@ export default {
   },
   methods:{
     showAllBooks: function (){
-      db.firestore().collection('market_books').doc("exam_book").collection("release_product").get().then(querySnapshot => {
+      db.firestore().collection('market_books').doc(this.classification_type).collection("release_product").get().then(querySnapshot => {
         let doc_data = [];
         querySnapshot.forEach(doc => {
-          doc_data.push(doc.data())
+          doc_data.push(doc)
         });
         this.querySnapshot = querySnapshot
         console.log(doc_data)
         this.all_doc_data = doc_data
       })
+    },
+    sortListType: function (){
+      this.sort_type = 'list'
+    },
+    sortGridType: function (){
+      this.sort_type = 'grid'
+    },
+    examType: function (){
+      this.classification_type = 'exam_book'
+      this.showAllBooks()
+    },
+    professionalType: function (){
+      this.classification_type = 'professional_book'
+    },
+    computerType: function (){
+      this.classification_type = 'computer_book'
+    },
+    religiousHumanities: function (){
+      this.classification_type = 'religious_humanities_book'
+    },
+    artDesign: function (){
+      this.classification_type = 'art_design_book'
+    },
+    travelFool: function (){
+      this.classification_type = 'travel_fool_book'
+    },
+    parentChild: function (){
+      this.classification_type = 'parent_child_book'
+    },
+    comicNovel: function (){
+      this.classification_type = 'comic_novel_book'
+    },
+    businessFinance: function (){
+      this.classification_type = 'business_finance_book'
     }
   }
 }

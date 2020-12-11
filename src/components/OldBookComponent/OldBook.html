@@ -2,15 +2,15 @@
     <div class="row">
         <div class="col-sm-3 hidden-xs">
             <div class="list-group">
-                <a href="#" class="list-group-item">考試用書</a>
-                <a href="#" class="list-group-item">專業教科書</a>
-                <a href="#" class="list-group-item">語言電腦</a>
-                <a href="#" class="list-group-item">宗教人文</a>
-                <a href="#" class="list-group-item">藝術設計</a>
-                <a href="#" class="list-group-item">旅遊飲食</a>
-                <a href="#" class="list-group-item">親子童書</a>
-                <a href="#" class="list-group-item">漫畫小說</a>
-                <a href="#" class="list-group-item">商業理財</a>
+                <a href="javascript:void(0)" @click="examType" class="list-group-item">考試用書</a>
+                <a href="javascript:void(0)" @click="professionalType" class="list-group-item">專業教科書</a>
+                <a href="javascript:void(0)" @click="computerType" class="list-group-item">語言電腦</a>
+                <a href="javascript:void(0)" @click="religiousHumanities" class="list-group-item">宗教人文</a>
+                <a href="javascript:void(0)" @click="artDesign" class="list-group-item">藝術設計</a>
+                <a href="javascript:void(0)" @click="travelFool" class="list-group-item">旅遊飲食</a>
+                <a href="javascript:void(0)" @click="parentChild" class="list-group-item">親子童書</a>
+                <a href="javascript:void(0)" @click="comicNovel" class="list-group-item">漫畫小說</a>
+                <a href="javascript:void(0)" @click="businessFinance" class="list-group-item">商業理財</a>
             </div>
 
             <div class="product-sidebar" style="margin-top: 30px">
@@ -61,8 +61,8 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="btn-group hidden-xs">
-                        <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="List View"><i class="fa fa-th-list"></i></button>
-                        <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="Grid View"><i class="fa fa-th"></i></button>
+                        <button type="button" @click="sortListType" id="list-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="List View"><i class="fa fa-th-list"></i></button>
+                        <button type="button" @click="sortGridType" id="grid-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="Grid View"><i class="fa fa-th"></i></button>
                     </div>
                 </div>
                 <div class="col-sm-1 text-right">
@@ -92,29 +92,112 @@
                 </div>
             </div>
             <br>
-            <div class="row" v-for="doc in this.all_doc_data">
-                <!-- Product Item -->
-                <div class="product-list col-xs-12" style="margin-left: 10px; margin-right: 10px">
-                    <div class="product-item">
-                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Product 2"></a>
 
-                        <div class="name">
-                            <a href="#">{{doc.book_name}}</a>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6" v-for="doc in all_doc_data" v-if="this.sort_type === 'grid'">
+                        <div class="product-grid3" style="margin-bottom: 15px">
+                            <div class="product-image3">
+                                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img v-bind:src=doc.data().product_one_img_url class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img v-bind:src=doc.data().product_two_img_url class="d-block w-100" alt="...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="social">
+                                    <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+<!--                                <span class="product-new-label">New</span>-->
+                            </div>
+                            <div class="product-content">
+                                <div class="card-body">
+                                    <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
+                                    <h7 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h7><p></p>
+                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h7><p></p>
+                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h7><p></p>
+                                    <h7 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h7>
+                                    <h7 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h7>
+                                    <h7 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h7>
+                                    <h7 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h7>
+                                    <p></p>
+                                    <h7 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h7>
+                                    <h7 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h7>
+                                    <h7 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h7>
+                                    <h7 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h7>
+                                    <p></p>
+                                    <h7 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h7>
+                                    <h7 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h7>
+                                    <h7 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h7>
+                                    <p></p>
+                                    <div class="price">
+                                    <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
+                                        <!--                                    <span>$75.00</span>-->
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                        <div class="description">
-                            <p>{{doc.book_description}}</p>
-                        </div>
-                        <div class="price">
-                            <span class="price-new">${{doc.book_money}}</span>
-                        </div>
-                        <div class="cart">
-                            <button type="button" class="btn btn-primary">Add to Cart</button>
-                        </div>
-                        <button type="button" class="btn btn-default wishlist" data-toggle="tooltip" data-placement="right" title="Wishlist"><i class="fa fa-heart"></i></button>
-<!--                        <button type="button" class="btn btn-default compare" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fa fa-circle-o"></i></button>-->
+
                     </div>
                 </div>
-                <!--/ Product Item -->
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12" v-for="doc in all_doc_data" v-if="this.sort_type === 'list'" style="margin-bottom: 20px">
+                        <div class="product-grid3 product-grid3-list" >
+                            <div class="product-image3">
+                                <div id="carouselExampleSlidesOnly1" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img v-bind:src=doc.data().product_one_img_url class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img v-bind:src=doc.data().product_two_img_url class="d-block w-100" alt="...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="social">
+                                    <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+<!--                                <span class="product-new-label">New</span>-->
+                            </div>
+                            <div class="product-content">
+                                <div class="card-body">
+                                    <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
+                                    <h7 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h7><p></p>
+                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h7><p></p>
+                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h7><p></p>
+                                    <h7 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h7>
+                                    <h7 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h7>
+                                    <h7 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h7>
+                                    <h7 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h7>
+                                    <p></p>
+                                    <h7 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h7>
+                                    <h7 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h7>
+                                    <h7 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h7>
+                                    <h7 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h7>
+                                    <p></p>
+                                    <h7 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h7>
+                                    <h7 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h7>
+                                    <h7 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h7>
+                                    <p></p>
+                                    <div class="price">
+                                        <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
+                                        <!--                                    <span>$75.00</span>-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

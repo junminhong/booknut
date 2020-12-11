@@ -88,7 +88,6 @@ export default {
       }
     },
     editProduct: function (){
-
       let storageRef_one = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_id + "1.jpg")
       let storageRef_two = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_id + "2.jpg")
       if (this.user != null){
@@ -99,16 +98,24 @@ export default {
               storageRef_two.delete()
               storageRef_two.put(this.book_two_pic).then(()=>{
                 this.editProductA(storageRef_one, storageRef_two)
+              }).catch(error=>{
+                console.log(error)
               })
             }else {
               this.editProductA(storageRef_one, storageRef_two)
             }
+          }).catch(error=>{
+            console.log(error)
           })
         }else if (this.book_two_pic !== null && this.book_two_pic !== undefined && this.book_two_pic !== ''){
           storageRef_two.delete()
           storageRef_two.put(this.book_two_pic).then(()=>{
             this.editProductA(storageRef_one, storageRef_two)
+          }).catch(error=>{
+            console.log(error)
           })
+        }else{
+          this.editProductA(storageRef_one, storageRef_two)
         }
       }
     },
@@ -116,13 +123,10 @@ export default {
       let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
       storageRef_one.getDownloadURL().then( result => {
         this.storageRef_one_result = result
-        console.log(result)
       }).then(()=>{
         storageRef_two.getDownloadURL().then( result => {
           this.storageRef_two_result = result
-          console.log(result)
         }).then(()=>{
-          console.log(this.user.uid)
           db.firestore().collection('users').doc(this.user.uid).collection("release_product").doc(this.product_id).update({
             book_isbn: this.book_isbn,
             book_name: this.book_name,
@@ -166,6 +170,8 @@ export default {
                   'success'
               ).then(()=>{
                 location.href = 'allrelease'
+              }).catch(error=>{
+                console.log(error)
               })
             }).catch(function (){
               Swal.fire(
@@ -176,8 +182,14 @@ export default {
                 location.href = 'allrelease'
               })
             })
+          }).catch(error=>{
+            console.log(error)
           })
+        }).catch(error=>{
+          console.log(error)
         })
+      }).catch(error=>{
+        console.log(error)
       })
     },
     previewOnePic: function (file){
