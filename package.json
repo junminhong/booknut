@@ -18,6 +18,7 @@
     "tesseract.js": "^2.1.4",
     "uid": "^2.0.0",
     "vue": "^3.0.0",
+    "vue-qrcode-reader": "^2.3.16",
     "vue-router": "^4.0.0-0",
     "vuefire": "^2.2.4"
   },

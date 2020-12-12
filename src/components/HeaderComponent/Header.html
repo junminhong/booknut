@@ -44,9 +44,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right: 10px">
                         <a class="dropdown-item" href="/profile">個人資料</a>
-                        <a class="dropdown-item" href="release">賣家中心</a>
-                        <a class="dropdown-item" href="release">訂單查詢</a>
-                        <a class="dropdown-item" href="release">堅果幣支付</a>
+                        <a class="dropdown-item" href="release" v-if="this.is_real_data_user">賣家中心</a>
+                        <a class="dropdown-item" href="">訂單查詢</a>
+                        <a class="dropdown-item" href="scanqrcode" v-if="this.is_real_data_user">堅果幣支付</a>
                         <a class="dropdown-item" href="#">常見問題</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" @click="userSignout">登出</a>

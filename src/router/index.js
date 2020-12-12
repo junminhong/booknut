@@ -9,6 +9,9 @@ import ProductRelease from "@/components/ProductReleaseComponent/ProductRelease"
 import Discuss from "@/components/DiscussComponent/Discuss"
 import AllReleaseProduct from "@/components/AllReleaseProduct/AllReleaseProduct"
 import ShopCart from "@/components/ShopCart/ShopCart"
+import QRCodeScanner from "@/components/QRCodeScanner/QRCodeScanner"
+import QrcodeStream from 'vue-qrcode-reader'
+
 const routes = [
   {
     path: '/',
@@ -67,6 +70,11 @@ const routes = [
     path: '/shopcart',
     name: 'ShopCart',
     component: ShopCart
+  },
+  {
+    path: '/scanqrcode',
+    name: 'QRCodeScanner',
+    component: QRCodeScanner, QrcodeStream
   }
 ]
 

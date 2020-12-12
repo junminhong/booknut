@@ -11,7 +11,8 @@ export default {
   },
   data(){
     return {
-      isSignin: false
+      isSignin: false,
+      is_real_data_user: false
     }
   },
   props: {
@@ -37,11 +38,22 @@ export default {
         profile_img.onload = function() {
           URL.revokeObjectURL(profile_img.src)
         }
+
+        db.firestore().collection("users").doc(user.uid).get().then(result=>{
+          let user_id_number = result.data().user_id_number
+          let user_phone = user.phoneNumber
+          if (user_id_number.toString().length != 0 && user_phone.toString().length != 0){
+            this.is_real_data_user = true
+          }
+        })
       }
     },
     userSignout: function (){
       this.isSignin = false
-      db.auth().signOut()
+      this.is_real_data_user = false
+      db.auth().signOut().then(()=>{
+        location.href = 'signin'
+      })
     }
   }
 }

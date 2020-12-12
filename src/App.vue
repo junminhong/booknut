@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 export default {
   name: 'app',
   components:{
-    HeaderComponent
+    HeaderComponent,
   },
   mounted() {
     this.checkUserStatus()

@@ -23,13 +23,19 @@ export default {
       all_doc_data: '',
       sort_type: 'list',
       classification_type: 'exam_book',
+      user_id_number: ''
     }
   },
   mounted() {
     this.showAllBooks()
   },
-  props: {
+  props:{
     user: Object,
+  },
+  watch:{
+    user: [{
+      handler: 'setUserIDNumber'
+    }]
   },
   methods:{
     showAllBooks: function (){
@@ -41,6 +47,11 @@ export default {
         this.querySnapshot = querySnapshot
         console.log(doc_data)
         this.all_doc_data = doc_data
+      })
+    },
+    setUserIDNumber: function(){
+      db.firestore().collection("users").doc(this.user.uid).get().then(result=>{
+        this.user_id_number = result.data().user_id_number
       })
     },
     sortListType: function (){
@@ -76,6 +87,32 @@ export default {
     },
     businessFinance: function (){
       this.classification_type = 'business_finance_book'
+    },
+    addShopCart: function (product_id, seller_uid){
+      if (seller_uid !== this.user.uid){
+        let shop_cart_count = 0
+        db.database().ref("/users/" + this.user.uid + '/shop_cart').get().then(snapshot => {
+          shop_cart_count = snapshot.numChildren()
+          if (shop_cart_count === 0){
+            db.database().ref("/users/" + this.user.uid + '/shop_cart' + '/' + shop_cart_count).update({
+              product_id: product_id
+            })
+          }else {
+            let shop_cart = snapshot.val()
+            let canAddCart = true
+            shop_cart.forEach(shop_cart_product_id => {
+              if (shop_cart_product_id.product_id === product_id) {
+                canAddCart = false
+              }
+            })
+            if (canAddCart){
+              db.database().ref("/users/" + this.user.uid + '/shop_cart' + '/' + shop_cart_count).update({
+                product_id: product_id
+              })
+            }
+          }
+        })
+      }
     }
   }
 }

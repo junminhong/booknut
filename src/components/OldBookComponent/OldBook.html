@@ -87,9 +87,9 @@
                         <option value="">20</option>
                     </select>
                 </div>
-                <div class="col-sm-2 text-right">
-                    <a href="release"><button type="button" class="btn btn-primary">發布商品</button></a>
-                </div>
+<!--                <div class="col-sm-2 text-right">-->
+<!--                    <a href="release"><button type="button" class="btn btn-primary">發布商品</button></a>-->
+<!--                </div>-->
             </div>
             <br>
 
@@ -111,32 +111,35 @@
 
                                 <ul class="social">
                                     <li><a href="#"><i class="fa fa-eye"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().release_user_uuid)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
 <!--                                <span class="product-new-label">New</span>-->
                             </div>
                             <div class="product-content">
                                 <div class="card-body">
                                     <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
-                                    <h7 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h7><p></p>
-                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h7><p></p>
-                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h7><p></p>
-                                    <h7 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h7>
-                                    <h7 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h7>
-                                    <h7 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h7>
-                                    <h7 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h7>
+                                    <h6 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h6>
                                     <p></p>
-                                    <h7 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h7>
-                                    <h7 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h7>
-                                    <h7 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h7>
-                                    <h7 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h7>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h6>
                                     <p></p>
-                                    <h7 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h7>
-                                    <h7 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h7>
-                                    <h7 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h7>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h6>
+                                    <h6 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h6>
+                                    <h6 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
                                     <p></p>
                                     <div class="price">
-                                    <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
+                                        <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
                                         <!--                                    <span>$75.00</span>-->
                                     </div>
                                 </div>
@@ -164,29 +167,32 @@
                                 </div>
                                 <ul class="social">
                                     <li><a href="#"><i class="fa fa-eye"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().release_user_uuid)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
 <!--                                <span class="product-new-label">New</span>-->
                             </div>
                             <div class="product-content">
                                 <div class="card-body">
                                     <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
-                                    <h7 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h7><p></p>
-                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h7><p></p>
-                                    <h7 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h7><p></p>
-                                    <h7 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h7>
-                                    <h7 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h7>
-                                    <h7 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h7>
-                                    <h7 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h7>
+                                    <h6 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h6>
                                     <p></p>
-                                    <h7 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h7>
-                                    <h7 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h7>
-                                    <h7 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h7>
-                                    <h7 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h7>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h6>
                                     <p></p>
-                                    <h7 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h7>
-                                    <h7 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h7>
-                                    <h7 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h7>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h6>
+                                    <h6 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h6>
+                                    <h6 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
                                     <p></p>
                                     <div class="price">
                                         <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}

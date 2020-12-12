@@ -14,7 +14,10 @@
             <div class="help-block with-errors" style="color: red;">{{ user_password_error_msg }}</div>
         </div>
         <div class="form-group">
-            <a href="#" @click="forgetPassword"><label>忘記密碼?</label></a>
+            <a href="javascript:void(0)" @click="forgetPassword"><label>忘記密碼?</label></a>
+        </div>
+        <div class="form-group">
+            <a href="javascript:void(0)" @click="resendEmailVerified"><label>沒有收到信?</label></a>
         </div>
         <div style="text-align: center;">
             <button type="button" @click="signin" class="btn btn-primary" style="text-align: center">SIGN IN</button>
