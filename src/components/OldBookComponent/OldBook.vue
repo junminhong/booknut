@@ -88,14 +88,20 @@ export default {
     businessFinance: function (){
       this.classification_type = 'business_finance_book'
     },
-    addShopCart: function (product_id, seller_uid){
+    addShopCart: function (product_id, classification, seller_uid, book_isbn, book_name, book_money, book_status){
       if (seller_uid !== this.user.uid){
         let shop_cart_count = 0
-        db.database().ref("/users/" + this.user.uid + '/shop_cart').get().then(snapshot => {
+        db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid).get().then(snapshot => {
           shop_cart_count = snapshot.numChildren()
           if (shop_cart_count === 0){
-            db.database().ref("/users/" + this.user.uid + '/shop_cart' + '/' + shop_cart_count).update({
-              product_id: product_id
+            db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + shop_cart_count).update({
+              product_id: product_id,
+              classification: classification,
+              book_isbn: book_isbn,
+              book_name: book_name,
+              book_money: book_money,
+              book_status: book_status,
+              want_to_buy: true
             })
           }else {
             let shop_cart = snapshot.val()
@@ -106,8 +112,14 @@ export default {
               }
             })
             if (canAddCart){
-              db.database().ref("/users/" + this.user.uid + '/shop_cart' + '/' + shop_cart_count).update({
-                product_id: product_id
+              db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + shop_cart_count).update({
+                product_id: product_id,
+                classification: classification,
+                book_isbn: book_isbn,
+                book_name: book_name,
+                book_money: book_money,
+                book_status: book_status,
+                want_to_buy: true
               })
             }
           }

@@ -3,15 +3,13 @@
 </template>
 
 <script>
-import QrcodeStream from 'vue-qrcode-reader'
+import {QrStream} from 'vue3-qr-reader';
 
 export default {
   name: "QRCodeScanner",
-
   components: {
-    QrcodeStream,
+    QrStream
   },
-
   data () {
     return {
       isValid: undefined,

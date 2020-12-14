@@ -34,15 +34,16 @@ export default {
         let storageRef_profile_pic = db.storage().ref("profile_pic/" + user.uid + ".jpg")
         storageRef_profile_pic.getDownloadURL().then( result => {
           profile_img.src = result
+          profile_img.onload = function() {
+            URL.revokeObjectURL(profile_img.src)
+          }
+        }).catch(error=>{
+          console.log(error)
         })
-        profile_img.onload = function() {
-          URL.revokeObjectURL(profile_img.src)
-        }
-
         db.firestore().collection("users").doc(user.uid).get().then(result=>{
           let user_id_number = result.data().user_id_number
           let user_phone = user.phoneNumber
-          if (user_id_number.toString().length != 0 && user_phone.toString().length != 0){
+          if (user_id_number !== '' && user_id_number !== undefined && user_phone !== '' && user_phone !== undefined){
             this.is_real_data_user = true
           }
         })
