@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     checkUserAccountStatus: function () {
+      console.log(this.user.email)
       this.user_email = this.user.email
       this.user_phone = db.auth().currentUser.phoneNumber
       db.firestore().collection("users").doc(this.user.uid).get().then(user=>{

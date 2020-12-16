@@ -19,7 +19,11 @@ export default {
       all_shop_cart_user_name: [],
       all_shop_cart_user_id: [],
       all_shop_cart_product: '',
-      total_money: 0
+      total_money: 0,
+      fare_money: 0,
+      discountCode: '',
+      fare_discount_money: '',
+      is_use_discount_code: false
     }
   },
   methods:{
@@ -37,13 +41,21 @@ export default {
             let shop_cart_product = []
             snap_shot.val().forEach(product_snap_shot=>{
               shop_cart_product.push(product_snap_shot)
+              this.total_money += parseInt(product_snap_shot.book_money)
             })
+            this.fare_money += 60
             all_shop_cart_product.set(result.data().user_name, shop_cart_product)
             this.all_shop_cart_product = all_shop_cart_product
-
           })
         })
       })
+    },
+    useDiscountCode: function (){
+      if (this.discountCode === 'booknut'){
+        this.is_use_discount_code = true
+        this.fare_discount_money = '$ ' + this.fare_money
+        this.fare_money = 0
+      }
     },
     allSelectShopCart: function (){
       // let now_user = db.auth().currentUser

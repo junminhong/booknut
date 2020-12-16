@@ -6,7 +6,6 @@
 <script>
 import HeaderComponent from '@/components/HeaderComponent/Header'
 import db from "@/db";
-import Swal from "sweetalert2";
 
 export default {
   name: 'app',
@@ -48,15 +47,6 @@ export default {
           this.user_name =  ''
         }
       })
-      db.auth().getRedirectResult().then(function(result) {
-        if (result.credential) {
-          // Swal.fire("成功")
-          location.href = '/'
-        }
-      }).catch(function(error) {
-        console.log(error)
-        Swal.fire("error")
-      });
     }
   }
 }

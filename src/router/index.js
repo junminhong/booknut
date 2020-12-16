@@ -7,9 +7,11 @@ import Profile from '@/components/ProfileComponent/Profile'
 import OldBook from "@/components/OldBookComponent/OldBook"
 import ProductRelease from "@/components/ProductReleaseComponent/ProductRelease"
 import Discuss from "@/components/DiscussComponent/Discuss"
-import AllReleaseProduct from "@/components/AllReleaseProduct/AllReleaseProduct"
+import AllReleaseProduct from "@/components/AllReleaseProductComponent/AllReleaseProduct"
 import ShopCart from "@/components/ShopCartComponent/ShopCart"
 import QRCodeScanner from "@/components/QRCodeScannerComponent/QRCodeScanner"
+import db from "@/db";
+import TransactionProcess from "@/components/TransactionProcessComponent/TransactionProcess";
 
 const routes = [
   {
@@ -28,12 +30,14 @@ const routes = [
   {
     path: '/signup',
     name: 'Signup',
-    component: Signup
+    component: Signup,
+    meta: { isLoginAuth: true }
   },
   {
     path: '/signin',
     name: 'SingIn',
-    component: SignIn
+    component: SignIn,
+    meta: { isLoginAuth: true }
   },
   {
     path: '/new',
@@ -43,7 +47,8 @@ const routes = [
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/old',
@@ -53,7 +58,8 @@ const routes = [
   {
     path: '/release',
     name: 'ProductRelease',
-    component: ProductRelease
+    component: ProductRelease,
+    meta: { requiresAuth: true, realDataAuth: true }
   },
   {
     path: '/discuss',
@@ -63,7 +69,8 @@ const routes = [
   {
     path: '/allrelease',
     name: 'AllReleaseProduct',
-    component: AllReleaseProduct
+    component: AllReleaseProduct,
+    meta: { requiresAuth: true, realDataAuth: true }
   },
   {
     path: '/shopcart',
@@ -73,13 +80,56 @@ const routes = [
   {
     path: '/scanqrcode',
     name: 'QRCodeScanner',
-    component: QRCodeScanner
+    component: QRCodeScanner,
+    meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/transactionprocess',
+    name: 'TransactionProcess',
+    component: TransactionProcess,
+    meta: { requiresAuth: true, realDataAuth: true }
   }
 ]
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  // 如果 router 轉跳的頁面需要驗證 requiresAuth: true
+  if(to.meta.requiresAuth){
+    db.auth().onAuthStateChanged(user => {
+      if (to.meta.realDataAuth){
+        db.firestore().collection("users").doc(user.uid).get().then(result=>{
+          let user_id_number = result.data().user_id_number
+          let user_phone = user.phoneNumber
+          if (user_id_number !== '' && user_id_number !== undefined && user_phone !== '' && user_phone !== undefined){
+            next()
+          }else{
+            location.href = 'old'
+          }
+        })
+      }else{
+        if (user != null && user.emailVerified){
+          next()
+        }else{
+          location.href = 'signin'
+        }
+      }
+    })
+  }else if(to.meta.isLoginAuth){
+    db.auth().onAuthStateChanged(user =>{
+      if (user != null && user.emailVerified){
+        console.log(user)
+        location.href = '/'
+      }else{
+        next()
+      }
+    })
+  }
+  next()
+});
 
 export default router

@@ -66,27 +66,35 @@ export default {
     },
     professionalType: function (){
       this.classification_type = 'professional_book'
+      this.showAllBooks()
     },
     computerType: function (){
       this.classification_type = 'computer_book'
+      this.showAllBooks()
     },
     religiousHumanities: function (){
       this.classification_type = 'religious_humanities_book'
+      this.showAllBooks()
     },
     artDesign: function (){
       this.classification_type = 'art_design_book'
+      this.showAllBooks()
     },
     travelFool: function (){
       this.classification_type = 'travel_fool_book'
+      this.showAllBooks()
     },
     parentChild: function (){
       this.classification_type = 'parent_child_book'
+      this.showAllBooks()
     },
     comicNovel: function (){
       this.classification_type = 'comic_novel_book'
+      this.showAllBooks()
     },
     businessFinance: function (){
       this.classification_type = 'business_finance_book'
+      this.showAllBooks()
     },
     addShopCart: function (product_id, classification, seller_uid, book_isbn, book_name, book_money, book_status){
       if (seller_uid !== this.user.uid){

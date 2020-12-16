@@ -75,14 +75,14 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>ISBN</label>
-                                                                <input class="form-control" v-model="book_isbn" type="text" name="name" placeholder="">
+                                                                <input class="form-control" v-model="book_isbn" type="text" maxlength="20" name="name" placeholder="">
                                                                 <div style="color: red"><small>{{book_isbn_error_msg}}</small></div>
                                                             </div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>書名</label>
-                                                                <input class="form-control" v-model="book_name" type="text" name="username" placeholder="">
+                                                                <input class="form-control" v-model="book_name" type="text"  maxlength="15" name="username" placeholder="">
                                                                 <div style="color: red"><small>{{book_name_error_msg}}</small></div>
                                                             </div>
                                                         </div>
@@ -91,7 +91,7 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>出版社</label>
-                                                                <input class="form-control" v-model="book_publishing_house" type="text" placeholder="">
+                                                                <input class="form-control" v-model="book_publishing_house" maxlength="15" type="text" placeholder="">
                                                                 <div style="color: red"><small>{{book_publishing_house_error_msg}}</small></div>
                                                             </div>
                                                         </div>
@@ -138,7 +138,7 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>售價金額</label>
-                                                                <input class="form-control" v-model="book_money" type="text" placeholder="">
+                                                                <input class="form-control" v-model="book_money" type="number" placeholder="">
                                                                 <div style="color: red"><small>{{book_money_error_msg}}</small></div>
                                                             </div>
                                                         </div>
@@ -147,7 +147,7 @@
                                                         <div class="col mb-3">
                                                             <div class="form-group">
                                                                 <label>商品描述</label>
-                                                                <textarea class="form-control" v-model="book_description" rows="5" placeholder=""></textarea>
+                                                                <textarea class="form-control" v-model="book_description" rows="5" maxlength="500" placeholder=""></textarea>
                                                                 <div style="color: red"><small>{{book_description_error_msg}}</small></div>
                                                             </div>
                                                         </div>
@@ -234,9 +234,13 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="px-xl-3">
-                                <button class="btn btn-block btn-secondary">
+                                <button @click="checkFrom" :hidden="is_uploading" class="btn btn-block btn-secondary">
                                     <i class="fa fa-sign-out"></i>
-                                    <span @click="checkFrom">{{release_product_type}}</span>
+                                    <span>{{release_product_type}}</span>
+                                </button>
+                                <button class="btn btn-primary btn-secondary" :hidden="!is_uploading" type="button" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Uploading...
                                 </button>
                             </div>
                         </div>

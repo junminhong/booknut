@@ -49,7 +49,8 @@ export default {
       storageRef_two_result: '',
       product_id: this.$route.query.product_id,
       release_product_type: '發佈商品',
-      book_classification_hidden: false
+      book_classification_hidden: false,
+      is_uploading: false
     }
   },
   methods:{
@@ -289,6 +290,7 @@ export default {
       }
     },
     releaseProduct: function (){
+      this.is_uploading = true
       this.product_uuid = uid(32)
       let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
       let storageRef_one = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_uuid + "1.jpg")
@@ -342,7 +344,8 @@ export default {
                     update_time: date,
                     product_one_img_url: this.storageRef_one_result,
                     product_two_img_url: this.storageRef_two_result
-                  }).then(function (){
+                  }).then(()=>{
+                    this.is_uploading = true
                     Swal.fire(
                         '賣家中心訊息',
                         "商品上架成功",
@@ -350,7 +353,8 @@ export default {
                     ).then(()=>{
                       location.href = 'release'
                     })
-                  }).catch(function (){
+                  }).catch(()=>{
+                    this.is_uploading = true
                     Swal.fire(
                         '賣家中心訊息',
                         "商品上架失敗",

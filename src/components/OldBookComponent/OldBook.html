@@ -98,7 +98,7 @@
                     <div class="col-md-4 col-sm-6" v-for="doc in all_doc_data" v-if="this.sort_type === 'grid'">
                         <div class="product-grid3" style="margin-bottom: 15px">
                             <div class="product-image3">
-                                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                                <div class="carousel slide" data-ride="carousel">
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
                                             <img v-bind:src=doc.data().product_one_img_url class="d-block w-100" alt="...">
@@ -155,7 +155,7 @@
                     <div class="col-md-12 col-sm-12" v-for="doc in all_doc_data" v-if="this.sort_type === 'list'" style="margin-bottom: 20px">
                         <div class="product-grid3 product-grid3-list" >
                             <div class="product-image3">
-                                <div id="carouselExampleSlidesOnly1" class="carousel slide" data-ride="carousel">
+                                <div id="carouselSlidesOnly1" class="carousel slide" data-ride="carousel">
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
                                             <img v-bind:src=doc.data().product_one_img_url class="d-block w-100" alt="...">

@@ -21,7 +21,7 @@ export default {
       book_shipment_date: '',
       book_money: '',
       all_doc_data: [],
-      total_index: '',
+      total_index: 1,
       product_id: '',
       storageRef_one_result: '',
       storageRef_two_result: ''
@@ -47,7 +47,8 @@ export default {
         if (all_doc_data.length < 10){
           this.total_index = 1
         }else{
-          this.total_index = all_doc_data.length / 10
+          let all_doc_data_len = all_doc_data.length
+          this.total_index += parseInt(all_doc_data_len / 10)
         }
 
       })
