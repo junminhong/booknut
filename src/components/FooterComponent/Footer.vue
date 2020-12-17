@@ -1,4 +1,4 @@
-<template>
+<template src="./Footer.html">
 
 </template>
 
@@ -8,6 +8,6 @@ name: "Footer"
 }
 </script>
 
-<style scoped>
+<style src="./Footer.css" scoped>
 
 </style>

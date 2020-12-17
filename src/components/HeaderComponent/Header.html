@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <a href="/" class="navbar-brand">BookNut</a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -31,13 +30,19 @@
             <a href="discuss" class="nav-item nav-link" style="padding-right: 20px;">討論區</a>
         </div>
         <div class="navbar-nav">
-            <a href="shopcart" class="nav-item nav-link" :hidden="!isSignin" style="margin-right: 15px">
-                <i class="fa fa-bell badge-wrapper" style="font-size: 22px">
-                    <span class='badge badge-secondary'>12{{}}</span>
-                </i>
-            </a>
+<!--            <a href="shopcart" class="nav-item nav-link" :hidden="!isSignin" style="margin-right: 15px">-->
+<!--                <i class="fa fa-bell badge-wrapper" style="font-size: 22px">-->
+<!--                    <span class='badge badge-secondary'>12{{}}</span>-->
+<!--                </i>-->
+<!--            </a>-->
             <div class="navbar-nav" :hidden="!isSignin">
+                <a href="" style="margin-right: 25px; margin-top: 8px">
+                    <i class="fa fa-bell fa-lg" style="font-size: 1.5em"></i>
+                    <span class="badge rounded-pill badge-notification bg-danger">100</span>
+                </a>
+
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle z-depth-0" id="profile_header_img" alt="avatar image" style="text-align: center;width: 35px; height: 35px">
+
                 <li class="nav-item dropdown" style="padding-right: 10px">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{user_name}}
@@ -45,7 +50,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="padding-right: 10px">
                         <a class="dropdown-item" href="/profile">個人資料</a>
                         <a class="dropdown-item" href="release" v-if="this.is_real_data_user">賣家中心</a>
-                        <a class="dropdown-item" href="">訂單查詢</a>
+                        <a class="dropdown-item" href="buyorder">訂單查詢</a>
                         <a class="dropdown-item" href="scanqrcode" v-if="this.is_real_data_user">堅果幣支付</a>
                         <a class="dropdown-item" href="#">常見問題</a>
                         <div class="dropdown-divider"></div>

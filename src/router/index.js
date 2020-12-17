@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/components/HomeComponent/Home'
 import Signup from '../components/SignUpComponent/SignUp'
 import SignIn from "@/components/SignInComponent/SignIn"
 import NewBook from "@/components/NewBookComponent/NewBook"
@@ -12,12 +11,15 @@ import ShopCart from "@/components/ShopCartComponent/ShopCart"
 import QRCodeScanner from "@/components/QRCodeScannerComponent/QRCodeScanner"
 import db from "@/db";
 import TransactionProcess from "@/components/TransactionProcessComponent/TransactionProcess";
+import BuyOrder from "@/components/BuyOrderComponent/BuyOrder";
+import OrderDetail from "@/components/OrderDetailComponent/OrderDetail";
+
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'home',
+    component: OldBook
   },
   {
     path: '/about',
@@ -87,6 +89,18 @@ const routes = [
     path: '/transactionprocess',
     name: 'TransactionProcess',
     component: TransactionProcess,
+    meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/buyorder',
+    name: 'BuyOrder',
+    component: BuyOrder,
+    meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/orderdetail',
+    name: 'OrderDetail',
+    component: OrderDetail,
     meta: { requiresAuth: true, realDataAuth: true }
   }
 ]

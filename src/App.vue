@@ -1,16 +1,19 @@
 <template>
   <header-component :user_name="user_name"/>
-  <router-view :user="user"/>
+  <router-view :user="user"  style="min-height: 1080px"/>
+  <Footer></Footer>
 </template>
 
 <script>
 import HeaderComponent from '@/components/HeaderComponent/Header'
+import Footer from "@/components/FooterComponent/Footer";
 import db from "@/db";
 
 export default {
   name: 'app',
   components:{
     HeaderComponent,
+    Footer
   },
   mounted() {
     this.checkUserStatus()

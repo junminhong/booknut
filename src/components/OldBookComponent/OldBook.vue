@@ -4,6 +4,7 @@
 
 <script>
 import db from "@/db"
+import {uid} from "uid";
 export default {
   name: "OldBook",
   data(){
@@ -45,7 +46,6 @@ export default {
           doc_data.push(doc)
         });
         this.querySnapshot = querySnapshot
-        console.log(doc_data)
         this.all_doc_data = doc_data
       })
     },
@@ -102,7 +102,7 @@ export default {
         db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid).get().then(snapshot => {
           shop_cart_count = snapshot.numChildren()
           if (shop_cart_count === 0){
-            db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + shop_cart_count).update({
+            db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + uid(10)).update({
               product_id: product_id,
               classification: classification,
               book_isbn: book_isbn,
@@ -112,15 +112,12 @@ export default {
               want_to_buy: true
             })
           }else {
-            let shop_cart = snapshot.val()
             let canAddCart = true
-            shop_cart.forEach(shop_cart_product_id => {
-              if (shop_cart_product_id.product_id === product_id) {
-                canAddCart = false
-              }
-            })
+            if (snapshot.val().product_id === product_id) {
+              canAddCart = false
+            }
             if (canAddCart){
-              db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + shop_cart_count).update({
+              db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + uid(10)).update({
                 product_id: product_id,
                 classification: classification,
                 book_isbn: book_isbn,

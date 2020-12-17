@@ -1,15 +1,33 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-<div class="container padding-bottom-3x mb-1" style="margin-top: 30px">
+
+<div class="container padding-bottom-3x mb-1" style="margin-top: 30px;">
     <div class="card mb-3">
-        <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">訂單編號 - </span><span class="text-medium">34VB5540K83</span></div>
+        <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">訂單編號 - </span><span class="text-medium">{{order_id}}</span></div>
         <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
             <div class="w-100 text-center py-1 px-2"><span class="text-medium">付款方式:</span> 行動支付</div>
-            <div class="w-100 text-center py-1 px-2"><span class="text-medium">訂單狀態:</span> 訂單成立</div>
-            <div class="w-100 text-center py-1 px-2"><span class="text-medium">訂單建立日期:</span> 2020/12/16</div>
+            <div class="w-100 text-center py-1 px-2" v-if="this.order_detail_product.order_status === 'create_order'">
+                <span class="text-medium">訂單狀態:</span> 訂單成立
+            </div>
+            <div class="w-100 text-center py-1 px-2" v-else-if="this.order_detail_product.order_status === 'wait_for_seller'">
+                <span class="text-medium">訂單狀態:</span> 等待賣家確認訂單
+            </div>
+
+            <div class="w-100 text-center py-1 px-2" v-else-if="this.order_detail_product.order_status === 'wait_for_buyer'">
+                <span class="text-medium">訂單狀態:</span> 等待買家付款
+            </div>
+
+            <div class="w-100 text-center py-1 px-2" v-else-if="this.order_detail_product.order_status === 'wait_for_ship'">
+                <span class="text-medium">訂單狀態:</span> 貨物運送中
+            </div>
+
+            <div class="w-100 text-center py-1 px-2" v-else="this.order_detail_product.order_status === 'wait_for_buyer_rec'">
+                <span class="text-medium">訂單狀態:</span> 等待買家收貨
+            </div>
+
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">訂單建立日期:</span> {{order_detail_product.order_date}}</div>
         </div>
         <div class="card-body">
             <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                <div class="step completed">
+                <div v-bind:class="{'step':true, 'completed': true}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-cart"></i></div>
                     </div>
