@@ -58,9 +58,13 @@
                     </div>
                 </li>
             </div>
-            <a href="shopcart" class="nav-item nav-link">
-                <img src="../../assets/imgs/png/shopping-cart.png" style="width: 25px; height: 25px">
+            <a href="" style="margin-right: 25px; margin-top: 8px">
+                <i class="fa fa-shopping-cart fa-lg" style="font-size: 1.5em"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">{{shop_cart_amount}}</span>
             </a>
+<!--            <a href="shopcart" class="nav-item nav-link">-->
+<!--                <img src="../../assets/imgs/png/shopping-cart.png" style="width: 25px; height: 25px">-->
+<!--            </a>-->
             <router-link to="/signup" :hidden="isSignin" class="nav-item nav-link">註冊</router-link>
             <router-link to="/signin" :hidden="isSignin" class="nav-item nav-link">登入</router-link>
         </div>

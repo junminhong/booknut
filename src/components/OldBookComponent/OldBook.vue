@@ -113,9 +113,11 @@ export default {
             })
           }else {
             let canAddCart = true
-            if (snapshot.val().product_id === product_id) {
-              canAddCart = false
-            }
+            snapshot.forEach(snap_shot_Tmp=>{
+              if (snap_shot_Tmp.val().product_id === product_id) {
+                canAddCart = false
+              }
+            })
             if (canAddCart){
               db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + uid(10)).update({
                 product_id: product_id,

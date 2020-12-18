@@ -1,5 +1,5 @@
 <template>
-  <header-component :user_name="user_name"/>
+  <header-component :user_name="user_name" :user="user"/>
   <router-view :user="user"  style="min-height: 1080px"/>
   <Footer></Footer>
 </template>

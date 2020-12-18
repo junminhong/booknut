@@ -4,6 +4,7 @@
 
 <script>
 import db from "@/db";
+
 export default {
   name: "header-component",
   mounted() {
@@ -12,19 +13,24 @@ export default {
   data(){
     return {
       isSignin: false,
-      is_real_data_user: false
+      is_real_data_user: false,
+      shop_cart_amount: 0,
     }
   },
   props: {
     user_name: String,
+    user: Object,
   },
   watch: {
     user_name: [{
       handler: 'hideSignInAndSignUp'
+    }],
+    user: [{
+      handler: 'updateShopCartAmount'
     }]
   },
   methods: {
-     hideSignInAndSignUp: function () {
+    hideSignInAndSignUp: function () {
       if (this.user_name.toString().length == 0) {
         this.isSignin = false
       }else if (this.user_name.toString().length != 0){
@@ -55,6 +61,17 @@ export default {
       db.auth().signOut().then(()=>{
         location.href = 'signin'
       })
+    },
+    updateShopCartAmount: function (){
+      let tutorialsRef = db.database().ref("/users/" + this.user.uid + '/shop_cart/');
+      tutorialsRef.on('value', snapshot => {
+        this.shop_cart_amount = 0
+        snapshot.forEach(childSnapshot => {
+          childSnapshot.forEach(()=>{
+            this.shop_cart_amount += 1
+          })
+        });
+      });
     }
   }
 }
