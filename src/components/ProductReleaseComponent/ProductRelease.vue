@@ -7,10 +7,14 @@ import { uid } from 'uid'
 let dateFormat = require("dateformat")
 import db from "@/db"
 import Swal from "sweetalert2";
+import Loading from "vue3-loading-overlay";
 export default {
   name: "ProductRelease",
   props: {
     user: Object,
+  },
+  components: {
+    Loading
   },
   mounted() {
     this.checkNowProductType()
@@ -50,7 +54,8 @@ export default {
       product_id: this.$route.query.product_id,
       release_product_type: '發佈商品',
       book_classification_hidden: false,
-      is_uploading: false
+      is_uploading: false,
+      loading: false
     }
   },
   methods:{
@@ -164,7 +169,8 @@ export default {
               update_time: date,
               product_one_img_url: this.storageRef_one_result,
               product_two_img_url: this.storageRef_two_result
-            }).then(function (){
+            }).then( () =>{
+              this.loading = false
               Swal.fire(
                   '賣家中心訊息',
                   "商品編輯成功",
@@ -174,10 +180,10 @@ export default {
               }).catch(error=>{
                 console.log(error)
               })
-            }).catch(function (){
+            }).catch(error =>{
               Swal.fire(
                   '賣家中心訊息',
-                  "商品編輯失敗",
+                  error,
                   'error'
               ).then(()=>{
                 location.href = 'allrelease'
@@ -270,8 +276,10 @@ export default {
       }
       if (this.can_release_product){
         if (this.release_product_type === '編輯商品'){
+          this.loading = true
           this.editProduct()
         }else{
+          this.loading = true
           this.releaseProduct()
         }
         this.book_name_error_msg = ''
@@ -346,6 +354,7 @@ export default {
                     product_two_img_url: this.storageRef_two_result
                   }).then(()=>{
                     this.is_uploading = true
+                    this.loading = false
                     Swal.fire(
                         '賣家中心訊息',
                         "商品上架成功",

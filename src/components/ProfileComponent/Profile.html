@@ -1,5 +1,8 @@
-<div class="container light-style flex-grow-1 container-p-y" style="text-align: left;margin-top: 30px">
 
+<div class="container light-style flex-grow-1 container-p-y" style="text-align: left;margin-top: 30px">
+    <div class="vld-parent">
+        <loading :active="loading"></loading>
+    </div>
     <h4 class="font-weight-bold py-3 mb-4">
         修改個人資訊
     </h4>
@@ -128,6 +131,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="form-label">身份證</label>
                                 <input type="text" :class="{'form-control': true, 'is-valid': user_id_number_is_ok}" disabled="true" placeholder="ex: Lxxxxxxxx" v-model="user_id_number" >

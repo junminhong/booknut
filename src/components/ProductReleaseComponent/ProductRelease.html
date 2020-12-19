@@ -1,5 +1,8 @@
 
 <div class="container" style="margin-top: 30px">
+    <div class="vld-parent">
+        <loading :active="loading"></loading>
+    </div>
     <div class="row flex-lg-nowrap">
         <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
             <div class="card p-3">
@@ -234,14 +237,14 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="px-xl-3">
-                                <button @click="checkFrom" :hidden="is_uploading" class="btn btn-block btn-secondary">
+                                <button @click="checkFrom" class="btn btn-block btn-secondary">
                                     <i class="fa fa-sign-out"></i>
                                     <span>{{release_product_type}}</span>
                                 </button>
-                                <button class="btn btn-primary btn-secondary" :hidden="!is_uploading" type="button" disabled>
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    Uploading...
-                                </button>
+<!--                                <button class="btn btn-primary btn-secondary" :hidden="!is_uploading" type="button" disabled>-->
+<!--                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>-->
+<!--                                    Uploading...-->
+<!--                                </button>-->
                             </div>
                         </div>
                     </div>

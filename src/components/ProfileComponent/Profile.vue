@@ -6,6 +6,10 @@
 
 import db from "@/db";
 import Swal from 'sweetalert2'
+// Import component
+import Loading from 'vue3-loading-overlay';
+// Import stylesheet
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 const axios = require('axios');
 const FormData = require('form-data');
 import { uid } from 'uid'
@@ -13,6 +17,9 @@ export default {
   name: "Profile",
   props: {
     user: Object,
+  },
+  components: {
+    Loading
   },
   data(){
     return{
@@ -60,7 +67,8 @@ export default {
       id_send_sms: true,
       can_create_user_real_data: true,
       is_have_user_phone_number: false,
-      is_have_user_real_data: false
+      is_have_user_real_data: false,
+      loading: false
     }
   },
   mounted() {
@@ -72,6 +80,9 @@ export default {
     }]
   },
   methods: {
+    onCancel: function (){
+      this.loading = false
+    },
     checkUserAccountStatus: function () {
       console.log(this.user.email)
       this.user_email = this.user.email
@@ -246,6 +257,7 @@ export default {
       })
     },
     convertBlobImg: function (file){
+      this.loading = true
       let blob = file.target.files[0]
       const reader = new FileReader()
       reader.readAsDataURL(blob)
@@ -276,6 +288,7 @@ export default {
             lines = lines[lines.length - 1]["Words"]
             this.user_id_number = lines[lines.length - 1]["WordText"]
             console.log(response)
+            this.loading = false
           })
           .catch(function (error) {
             console.log(error);

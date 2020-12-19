@@ -20,6 +20,7 @@
     "vue": "^3.0.0",
     "vue-qrcode-reader": "^2.3.16",
     "vue-router": "^4.0.0-0",
+    "vue3-loading-overlay": "0.0.0",
     "vue3-qr-reader": "0.0.3",
     "vuefire": "^2.2.4"
   },
