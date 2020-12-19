@@ -60,32 +60,12 @@ export default {
     },
     signinWithGoogle: function (){
       const googleProvider = new db.auth.GoogleAuthProvider()
-      db.auth().signInWithRedirect(googleProvider).then(
-          () => {
-            Swal.fire(
-                "登入通知訊息",
-                "登入成功",
-                "success"
-            ).then(()=>{
-              location.href = '/'
-            })
-          }
-      ).catch(()=>{
+      db.auth().signInWithRedirect(googleProvider).then(() => {
+        location.href = '/'
+      }).catch(()=>{
         db.auth().signInWithPopup(googleProvider).then(() => {
-          Swal.fire(
-              "登入通知訊息",
-              "登入成功",
-              "success"
-          ).then(()=>{
-            location.href = '/'
-          })
-        }).catch(() => {
-          Swal.fire(
-              "登入通知訊息",
-              "登入失敗，請洽管理員",
-              "error"
-          )
-        });
+          location.href = '/'
+        })
       })
     },
     forgetPassword: function (){

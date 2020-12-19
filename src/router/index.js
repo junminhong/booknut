@@ -14,6 +14,8 @@ import TransactionProcess from "@/components/TransactionProcessComponent/Transac
 import BuyOrder from "@/components/BuyOrderComponent/BuyOrder";
 import OrderDetail from "@/components/OrderDetailComponent/OrderDetail";
 
+import SellerOrder from "@/components/SellerOrderComponent/SellerOrder";
+
 
 const routes = [
   {
@@ -102,6 +104,12 @@ const routes = [
     name: 'OrderDetail',
     component: OrderDetail,
     meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/sellerorder',
+    name: 'SellerOrder',
+    component: SellerOrder,
+    meta: { requiresAuth: true, realDataAuth: true }
   }
 ]
 
@@ -116,15 +124,25 @@ router.beforeEach((to, from, next) => {
   if(to.meta.requiresAuth){
     db.auth().onAuthStateChanged(user => {
       if (to.meta.realDataAuth){
-        db.firestore().collection("users").doc(user.uid).get().then(result=>{
-          let user_id_number = result.data().user_id_number
-          let user_phone = user.phoneNumber
-          if (user_id_number !== '' && user_id_number !== undefined && user_phone !== '' && user_phone !== undefined){
-            next()
+        if (user) {
+          if (user.uid !== undefined || user.uid !== '' || user.uid !== null){
+            db.firestore().collection("users").doc(user.uid).get().then(result=>{
+              let user_id_number = result.data().user_id_number
+              let user_phone = user.phoneNumber
+              if (user_id_number !== '' && user_id_number !== undefined && user_phone !== '' && user_phone !== undefined){
+                next()
+              }else{
+                location.href = 'old'
+              }
+            }).catch(()=>{
+              location.href = 'signin'
+            })
           }else{
-            location.href = 'old'
+            location.href = 'signin'
           }
-        })
+        }else{
+          location.href = 'signin'
+        }
       }else{
         if (user != null && user.emailVerified){
           next()
@@ -136,14 +154,14 @@ router.beforeEach((to, from, next) => {
   }else if(to.meta.isLoginAuth){
     db.auth().onAuthStateChanged(user =>{
       if (user != null && user.emailVerified){
-        console.log(user)
         location.href = '/'
       }else{
         next()
       }
     })
+  }else{
+    next()
   }
-  next()
 });
 
 export default router

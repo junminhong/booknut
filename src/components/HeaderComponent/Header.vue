@@ -39,6 +39,7 @@ export default {
         let user = db.auth().currentUser
         let storageRef_profile_pic = db.storage().ref("profile_pic/" + user.uid + ".jpg")
         storageRef_profile_pic.getDownloadURL().then( result => {
+          console.log(result)
           profile_img.src = result
           profile_img.onload = function() {
             URL.revokeObjectURL(profile_img.src)

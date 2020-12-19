@@ -90,10 +90,12 @@ export default {
       let storageRef_profile_pic = db.storage().ref("profile_pic/" + this.user.uid + ".jpg")
       storageRef_profile_pic.getDownloadURL().then( result => {
         profile_img.src = result
+        profile_img.onload = function() {
+          URL.revokeObjectURL(profile_img.src)
+        }
+      }).catch(error => {
+        console.log(error)
       })
-      profile_img.onload = function() {
-        URL.revokeObjectURL(profile_img.src)
-      }
       window.recaptchaVerifier = new db.auth.RecaptchaVerifier('send_sms', {
         'size': 'invisible',
         'callback': function(response) {

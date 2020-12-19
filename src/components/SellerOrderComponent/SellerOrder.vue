@@ -1,4 +1,4 @@
-<template src="./BuyOrder.html">
+<template src="./SellerOrder.html">
 
 </template>
 
@@ -6,7 +6,7 @@
 import db from "@/db";
 
 export default {
-  name: "BuyOrder",
+  name: "SellerOrder",
   data(){
     return{
       order_search_type: 'not_ok',
@@ -34,7 +34,7 @@ export default {
       }
     },
     notOkShowOrder:function (){
-      db.firestore().collection("users").doc(this.user.uid).collection("order_list").get().then(all_doc=>{
+      db.firestore().collection("users").doc(this.user.uid).collection("seller_order_list").get().then(all_doc=>{
         let all_doc_data = []
         all_doc.forEach(doc=>{
           all_doc_data.push(doc)
@@ -55,6 +55,6 @@ export default {
 }
 </script>
 
-<style src="./BuyOrder.css" scoped>
+<style src="./SellerOrder.css" scoped>
 
 </style>

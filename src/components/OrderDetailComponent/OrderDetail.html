@@ -5,10 +5,10 @@
     <!-- Cart Item-->
     <div>
         <hr>
-        <div class="cart-item d-md-flex justify-content-between" v-for="order in this.all_order_detail_product"><span class="remove-item"><i class="fa fa-times"></i></span>
+        <div class="cart-item d-md-flex justify-content-between" v-for="order in this.all_order_detail_product">
             <div class="px-3 my-3">
                 <a class="cart-item-product" >
-                    <div class="cart-item-product-thumb"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Product"></div>
+                    <div class="cart-item-product-thumb"><img v-bind:src=order.product_one_img_url alt="Product"></div>
                     <div class="cart-item-product-info">
                         <h4 class="cart-item-product-title">{{ order.order_book_name }}</h4>
                         <span><strong>ISBN:</strong> {{ order.order_book_isbn }}</span>
@@ -29,6 +29,16 @@
             </div>
             <div class="px-3 my-3 text-center">
                 <div class="cart-item-label">價錢</div><span class="text-xl font-weight-medium">${{ order.order_book_money }}</span>
+            </div>
+        </div>
+        <div class="d-sm-flex justify-content-between align-items-center text-center text-sm-left">
+            <div class="py-2">
+            <span class="d-inline-block align-middle text-sm text-muted font-weight-medium text-uppercase mr-2">
+                運費:</span>
+                <span class="d-inline-block align-middle text-xl font-weight-medium">$ {{fare_discount_money}}</span>
+                <p></p>
+                <span class="d-inline-block align-middle text-sm text-muted font-weight-medium text-uppercase mr-2">
+            總金額:</span><span class="d-inline-block align-middle text-xl font-weight-medium">$ {{total_money}}</span>
             </div>
         </div>
     </div>

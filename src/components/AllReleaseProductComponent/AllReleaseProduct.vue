@@ -30,12 +30,14 @@ export default {
   props: {
     user: Object,
   },
-
-  watch: {
-    user: [{
-      handler: 'showAllReleaseProduct'
-    }]
+  mounted() {
+    this.showAllReleaseProduct()
   },
+  // watch: {
+  //   user: [{
+  //     handler: 'showAllReleaseProduct'
+  //   }]
+  // },
   methods:{
     showAllReleaseProduct: function (){
       db.firestore().collection("users").doc(this.user.uid).collection("release_product").get().then(all_doc=>{

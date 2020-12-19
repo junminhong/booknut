@@ -4,14 +4,16 @@
     <div class="alert alert-info alert-dismissible fade show text-center mb-30"><span class="alert-close" data-dismiss="alert"></span><i class="fe-icon-award"></i>&nbsp;&nbsp; 因應專題全平台輸入折扣碼 <strong>booknut</strong> 則立即享有免運的優惠活動.</div>
     <!-- Cart Item-->
     <div v-for="user_name in this.all_shop_cart_user_name">
-        <div class="cart-item d-md-flex justify-content-between" ><span class="remove-item"><i class="fa fa-times"></i></span>
+        <div class="cart-item d-md-flex justify-content-between" >
+            <span class="remove-item" @click="removeSellerShopCart(user_name)"><i class="fa fa-times"></i></span>
             {{user_name}}
         </div>
         <hr>
-        <div class="cart-item d-md-flex justify-content-between" v-for="product in this.all_shop_cart_product.get(user_name)"><span class="remove-item"><i class="fa fa-times"></i></span>
+        <div class="cart-item d-md-flex justify-content-between" v-for="product in this.all_shop_cart_product.get(user_name)">
+            <span class="remove-item" @click="removeSingleShopCart(product.order_number, product.release_user_uuid)"><i class="fa fa-times"></i></span>
             <div class="px-3 my-3">
                 <a class="cart-item-product" >
-                    <div class="cart-item-product-thumb"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Product"></div>
+                    <div class="cart-item-product-thumb"><img v-bind:src=product.product_one_img_url alt="Product"></div>
                     <div class="cart-item-product-info">
                         <h4 class="cart-item-product-title">{{ product.book_name }}</h4>
                         <span><strong>ISBN:</strong> {{ product.book_isbn }}</span>

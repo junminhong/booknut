@@ -15,6 +15,8 @@ export default {
   watch: {
     user:[{
       handler: 'showAllShopCart'
+    },{
+      handler: 'updateShopCartAmount'
     }]
   },
   data(){
@@ -26,7 +28,8 @@ export default {
       fare_money: 0,
       discountCode: '',
       fare_discount_money: '',
-      is_use_discount_code: false
+      is_use_discount_code: false,
+      is_ok_flag: false
     }
   },
   methods:{
@@ -75,15 +78,22 @@ export default {
           if (this.fare_money === 0){
             have_fare_money = false
           }
+          this.is_ok_flag = true
           this.all_shop_cart_product.forEach((value, key)=>{
             let order_number = uid(10)
             let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
-            console.log(this.all_shop_cart_user_id.get(key))
+            let seller_id = this.all_shop_cart_user_id.get(key)
             db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).set({
               order_status: 'create_order',
               have_fare_money: have_fare_money,
               order_date: date,
-              seller_id: this.all_shop_cart_user_id.get(key)
+              seller_id: seller_id
+            })
+            db.firestore().collection("users").doc(seller_id).collection("seller_order_list").doc(order_number).set({
+              order_status: 'create_order',
+              have_fare_money: have_fare_money,
+              order_date: date,
+              buyer_id: this.user.uid
             })
             value.forEach((value, key)=>{
               db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).collection("shop_cart").doc(key.toString()).set({
@@ -94,13 +104,27 @@ export default {
                 order_book_money: value.book_money,
                 order_book_status: value.book_status,
                 order_want_to_buy: true,
+                product_one_img_url: value.product_one_img_url
+              }).then(()=>{
+                console.log(seller_id)
+                db.firestore().collection("users").doc(seller_id).collection("seller_order_list").doc(order_number).collection("sell_product").doc(key.toString()).set({
+                  order_product_id: value.product_id,
+                  order_classification: value.classification,
+                  order_book_isbn: value.book_isbn,
+                  order_book_name: value.book_name,
+                  order_book_money: value.book_money,
+                  order_book_status: value.book_status,
+                  order_want_to_buy: true,
+                  product_one_img_url: value.product_one_img_url
+                }).catch(error=>{
+                  console.log(error)
+                })
+              }).then(()=>{
+                db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id).remove()
               }).catch(error=>{
                 console.log(error)
               })
             })
-          })
-          db.database().ref("/users/" + this.user.uid + '/shop_cart').remove().then(()=>{
-            location.href = 'transactionprocess'
           })
         }
       })
@@ -117,6 +141,28 @@ export default {
       //     want_to_buy: false
       //   })
       // })
+    },
+    updateShopCartAmount: function (){
+      if(this.is_ok_flag){
+        let tutorialsRef = db.database().ref("/users/" + this.user.uid + '/shop_cart/');
+        tutorialsRef.on('child_removed', () => {
+          tutorialsRef.get().then(result=>{
+            if (result.numChildren() === 0){
+              location.href = 'transactionprocess'
+            }
+          })
+        });
+      }
+    },
+    removeSingleShopCart: function (product_id, seller_id){
+      this.is_ok_flag = false
+      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id + '/' + product_id).remove()
+      location.href = 'shopcart'
+    },
+    removeSellerShopCart: function (user_name){
+      let seller_id = this.all_shop_cart_user_id.get(user_name)
+      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id).remove()
+      location.href = 'shopcart'
     }
   }
 }

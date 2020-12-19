@@ -23,7 +23,7 @@ export default {
       user_cer: db.auth().currentUser,
       user_uid: '',
       user_name: '',
-      user: '',
+      user: [],
     }
   },
   methods: {
