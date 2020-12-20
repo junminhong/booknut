@@ -87,8 +87,11 @@
                             <td v-else-if="doc.data().book_transaction === 'nut_coin_payment'">
                                 堅果幣支付
                             </td>
-                            <td v-else="doc.data().book_transaction === 'swipe_online'">
+                            <td v-else-if="doc.data().book_transaction === 'swipe_online'">
                                 信用卡支付
+                            </td>
+                            <td v-else="doc.data().book_transaction === 'face_to_face'">
+                                面交
                             </td>
                             <td v-if="doc.data().book_shipment === 'seven_eleven'">
                                 7-11物流

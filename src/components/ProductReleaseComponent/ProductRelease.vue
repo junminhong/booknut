@@ -31,6 +31,7 @@ export default {
       book_description: '',
       book_status: '',
       book_transaction: '',
+      book_transaction_place: '',
       book_shipment: '',
       book_shipment_date: '',
       book_money: '',
@@ -42,6 +43,7 @@ export default {
       book_money_error_msg: '',
       book_description_error_msg: '',
       book_transaction_error_msg: '',
+      book_transaction_place_error_msg: '',
       book_shipment_error_msg: '',
       book_shipment_date_error_msg: '',
       book_isbn_error_msg: '',
@@ -142,6 +144,7 @@ export default {
             book_description: this.book_description,
             book_status: this.book_status,
             book_transaction: this.book_transaction,
+            book_transaction_place: this.book_transaction_place,
             book_shipment: this.book_shipment,
             book_shipment_date: this.book_shipment_date,
             book_money: this.book_money,
@@ -160,6 +163,7 @@ export default {
               book_description: this.book_description,
               book_status: this.book_status,
               book_transaction: this.book_transaction,
+              book_transaction_place: this.book_transaction_place,
               book_shipment: this.book_shipment,
               book_shipment_date: this.book_shipment_date,
               book_money: this.book_money,
@@ -222,57 +226,62 @@ export default {
       * 檢查表單
       * */
       this.can_release_product = true
-      if (this.book_name == ''){
+      if (this.book_name === ''){
         this.book_name_error_msg = '書籍名稱不可為空'
         this.can_release_product = false
       }
-      if (this.book_status == ''){
+      if (this.book_status === ''){
         this.book_status_error_msg = '書籍狀況不可為空'
         this.can_release_product = false
       }
-      if (this.book_shipment == ''){
+      if (this.book_shipment === ''){
         this.book_shipment_error_msg = '書籍寄貨方式不可為空'
         this.can_release_product = false
       }
-      if (this.book_description == ''){
+      if (this.book_description === ''){
         this.book_description_error_msg = '書籍描述不可為空'
         this.can_release_product = false
       }
-      if (this.book_shipment_date == ''){
+      if (this.book_shipment_date === ''){
         this.book_shipment_date_error_msg = '書籍出貨天數不可為空'
         this.can_release_product = false
       }
-      if (this.book_transaction == ''){
+      if (this.book_transaction === ''){
         this.book_transaction_error_msg = '書籍交易方式不可為空'
         this.can_release_product = false
       }
-      if (this.book_money == ''){
+      if (this.book_money === ''){
         this.book_money_error_msg = '書籍金額不可為空'
         this.can_release_product = false
       }
-      if (this.book_publishing_house == ''){
+      if (this.book_publishing_house === ''){
         this.book_publishing_house_error_msg = '書籍出版社不可為空'
         this.can_release_product = false
       }
-      if (this.book_publishing_date == ''){
+      if (this.book_publishing_date === ''){
         this.book_publishing_date_error_msg = '書籍出版日期不可為空'
         this.can_release_product = false
       }
-      if (this.book_isbn == ''){
+      if (this.book_isbn === ''){
         this.book_isbn_error_msg = '書籍ISBN不可為空'
         this.can_release_product = false
       }
-      if (this.book_classification == ''){
+      if (this.book_classification === ''){
         this.book_classification_error_msg = '書籍分類不可為空'
         this.can_release_product = false
       }
-      if (this.book_one_pic == '' && this.release_product_type === '發佈商品'){
+      if (this.book_one_pic === '' && this.release_product_type === '發佈商品'){
         this.book_one_pic_error_msg = '書籍圖片需要兩張'
         this.can_release_product = false
       }
-      if (this.book_two_pic == '' && this.release_product_type === '發佈商品'){
+      if (this.book_two_pic === '' && this.release_product_type === '發佈商品'){
         this.book_two_pic_error_msg = '書籍圖片需要兩張'
         this.can_release_product = false
+      }
+      if (this.book_classification === 'face_to_face'){
+        if (this.book_transaction_place === ''){
+          this.book_transaction_place_error_msg = '面交地點請勿空白'
+        }
       }
       if (this.can_release_product){
         if (this.release_product_type === '編輯商品'){
@@ -295,6 +304,7 @@ export default {
         this.book_isbn_error_msg = ''
         this.book_one_pic_error_msg = ''
         this.book_two_pic_error_msg = ''
+        this.book_transaction_place_error_msg = ''
       }
     },
     releaseProduct: function (){
@@ -323,6 +333,7 @@ export default {
                   book_description: this.book_description,
                   book_status: this.book_status,
                   book_transaction: this.book_transaction,
+                  book_transaction_place: this.book_transaction_place,
                   book_shipment: this.book_shipment,
                   book_shipment_date: this.book_shipment_date,
                   book_money: this.book_money,
@@ -342,6 +353,7 @@ export default {
                     book_description: this.book_description,
                     book_status: this.book_status,
                     book_transaction: this.book_transaction,
+                    book_transaction_place: this.book_transaction_place,
                     book_shipment: this.book_shipment,
                     book_shipment_date: this.book_shipment_date,
                     book_money: this.book_money,

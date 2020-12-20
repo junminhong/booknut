@@ -38,19 +38,27 @@ export default {
       let all_shop_cart_user_id = new Map()
       db.database().ref("/users/" + this.user.uid + '/shop_cart').get().then(result=>{
         result.forEach(snap_shot=>{
-          db.firestore().collection("users").doc(snap_shot.key).get().then(result=>{
-            all_shop_cart_user_id.set(result.data().user_name, snap_shot.key)
-            this.all_shop_cart_user_id = all_shop_cart_user_id
-            this.all_shop_cart_user_name.push(result.data().user_name)
-            let shop_cart_product = []
-            snap_shot.forEach(product_snap_shot=>{
-              shop_cart_product.push(product_snap_shot.val())
-              this.total_money += parseInt(product_snap_shot.val().book_money)
+          snap_shot.forEach(snap_shot_next=>{
+            db.firestore().collection("users").doc(snap_shot.key).get().then(result=>{
+              let order_name = result.data().user_name
+              if (snap_shot_next.key === 'face_to_face'){
+                order_name += ' - 面交'
+              }else if(snap_shot_next.key === 'nut_coin_payment'){
+                order_name += ' - 堅果幣支付'
+                this.fare_money += 60
+              }
+              all_shop_cart_user_id.set(snap_shot.key + ',' + snap_shot_next.key, order_name)
+              this.all_shop_cart_user_id = all_shop_cart_user_id
+              this.all_shop_cart_user_name.push(order_name)
+              let shop_cart_product = []
+              snap_shot_next.forEach(product_snap_shot=>{
+                shop_cart_product.push(product_snap_shot.val())
+                this.total_money += parseInt(product_snap_shot.val().book_money)
+              })
+              this.total_money += 60
+              all_shop_cart_product.set(snap_shot.key + ',' + snap_shot_next.key, shop_cart_product)
+              this.all_shop_cart_product = all_shop_cart_product
             })
-            this.fare_money += 60
-            this.total_money += 60
-            all_shop_cart_product.set(result.data().user_name, shop_cart_product)
-            this.all_shop_cart_product = all_shop_cart_product
           })
         })
       })
@@ -74,53 +82,58 @@ export default {
         confirmButtonText: '確定',
         cancelButtonText: '取消'}).then(result=>{
         if (result.isConfirmed) {
-          let have_fare_money = true
-          if (this.fare_money === 0){
-            have_fare_money = false
-          }
-          this.is_ok_flag = true
           this.all_shop_cart_product.forEach((value, key)=>{
+            let seller_id = key.split(',')[0]
+            let book_transaction = key.split(',')[1]
+            let have_fare_money = true
+            if (this.fare_money === 0){
+              have_fare_money = false
+            }
+            this.is_ok_flag = true
+            if (book_transaction === 'face_to_face'){
+              have_fare_money = false
+            }
             let order_number = uid(10)
             let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
-            let seller_id = this.all_shop_cart_user_id.get(key)
             db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).set({
               order_status: 'create_order',
               have_fare_money: have_fare_money,
               order_date: date,
-              seller_id: seller_id
+              seller_id: seller_id,
+              book_transaction: book_transaction
             })
             db.firestore().collection("users").doc(seller_id).collection("seller_order_list").doc(order_number).set({
               order_status: 'create_order',
               have_fare_money: have_fare_money,
               order_date: date,
-              buyer_id: this.user.uid
+              buyer_id: this.user.uid,
+              book_transaction: book_transaction
             })
-            value.forEach((value, key)=>{
+            value.forEach((result, key)=>{
               db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).collection("shop_cart").doc(key.toString()).set({
-                order_product_id: value.product_id,
-                order_classification: value.classification,
-                order_book_isbn: value.book_isbn,
-                order_book_name: value.book_name,
-                order_book_money: value.book_money,
-                order_book_status: value.book_status,
+                order_product_id: result.product_id,
+                order_classification: result.classification,
+                order_book_isbn: result.book_isbn,
+                order_book_name: result.book_name,
+                order_book_money: result.book_money,
+                order_book_status: result.book_status,
                 order_want_to_buy: true,
-                product_one_img_url: value.product_one_img_url
+                product_one_img_url: result.product_one_img_url
               }).then(()=>{
-                console.log(seller_id)
                 db.firestore().collection("users").doc(seller_id).collection("seller_order_list").doc(order_number).collection("sell_product").doc(key.toString()).set({
-                  order_product_id: value.product_id,
-                  order_classification: value.classification,
-                  order_book_isbn: value.book_isbn,
-                  order_book_name: value.book_name,
-                  order_book_money: value.book_money,
-                  order_book_status: value.book_status,
+                  order_product_id: result.product_id,
+                  order_classification: result.classification,
+                  order_book_isbn: result.book_isbn,
+                  order_book_name: result.book_name,
+                  order_book_money: result.book_money,
+                  order_book_status: result.book_status,
                   order_want_to_buy: true,
-                  product_one_img_url: value.product_one_img_url
+                  product_one_img_url: result.product_one_img_url
                 }).catch(error=>{
                   console.log(error)
                 })
               }).then(()=>{
-                db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id).remove()
+                db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id + '/' + book_transaction).remove()
               }).catch(error=>{
                 console.log(error)
               })
@@ -143,25 +156,28 @@ export default {
       // })
     },
     updateShopCartAmount: function (){
-      if(this.is_ok_flag){
-        let tutorialsRef = db.database().ref("/users/" + this.user.uid + '/shop_cart/');
-        tutorialsRef.on('child_removed', () => {
-          tutorialsRef.get().then(result=>{
-            if (result.numChildren() === 0){
+      let tutorialsRef = db.database().ref("/users/" + this.user.uid + '/shop_cart/');
+      tutorialsRef.on('child_removed', () => {
+        tutorialsRef.get().then(result=>{
+          if (result.numChildren() === 0){
+            if(this.is_ok_flag) {
               location.href = 'transactionprocess'
             }
-          })
-        });
-      }
+          }
+        })
+      });
     },
-    removeSingleShopCart: function (product_id, seller_id){
+    removeSingleShopCart: function (product_id, seller_id, book_transaction){
       this.is_ok_flag = false
-      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id + '/' + product_id).remove()
+      console.log(product_id, seller_id)
+      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id + '/' + book_transaction + '/' + product_id).remove()
       location.href = 'shopcart'
     },
     removeSellerShopCart: function (user_name){
-      let seller_id = this.all_shop_cart_user_id.get(user_name)
-      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id).remove()
+      let seller_id = user_name.split(',')[0]
+      let book_transaction = user_name.split(',')[1]
+      console.log(seller_id, book_transaction)
+      db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_id + '/' + book_transaction).remove()
       location.href = 'shopcart'
     }
   }

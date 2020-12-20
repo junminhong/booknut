@@ -97,20 +97,22 @@ export default {
       this.classification_type = 'business_finance_book'
       this.showAllBooks()
     },
-    addShopCart: function (product_id, classification, seller_uid, book_isbn, book_name, book_money, book_status, product_one_img_url, release_user_uuid){
+    addShopCart: function (product_id, classification, seller_uid, book_isbn, book_name, book_money, book_status, product_one_img_url, release_user_uuid, book_transaction){
       if (seller_uid !== this.user.uid){
         let shop_cart_count = 0
         db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid).get().then(snapshot => {
           shop_cart_count = snapshot.numChildren()
           let order_number = uid(10)
+          console.log(book_transaction)
           if (shop_cart_count === 0){
-            db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + order_number).update({
+            db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + book_transaction + '/' + order_number).update({
               product_id: product_id,
               classification: classification,
               book_isbn: book_isbn,
               book_name: book_name,
               book_money: book_money,
               book_status: book_status,
+              book_transaction: book_transaction,
               want_to_buy: true,
               product_one_img_url: product_one_img_url,
               release_user_uuid: release_user_uuid,
@@ -146,13 +148,14 @@ export default {
               }
             })
             if (canAddCart){
-              db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + order_number).update({
+              db.database().ref("/users/" + this.user.uid + '/shop_cart/' + seller_uid + '/' + book_transaction+ '/' + order_number).update({
                 product_id: product_id,
                 classification: classification,
                 book_isbn: book_isbn,
                 book_name: book_name,
                 book_money: book_money,
                 book_status: book_status,
+                book_transaction: book_transaction,
                 want_to_buy: true,
                 product_one_img_url: product_one_img_url,
                 release_user_uuid: release_user_uuid,

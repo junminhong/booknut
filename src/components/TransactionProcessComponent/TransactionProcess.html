@@ -3,7 +3,8 @@
     <div class="card mb-3">
         <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">訂單編號 - </span><span class="text-medium">{{doc[0]}}</span></div>
         <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
-            <div class="w-100 text-center py-1 px-2"><span class="text-medium">付款方式:</span> 行動支付</div>
+            <div class="w-100 text-center py-1 px-2" v-if="doc[1].book_transaction === 'nut_coin_payment'"><span class="text-medium">付款方式:</span> 堅果幣支付</div>
+            <div class="w-100 text-center py-1 px-2" v-else="doc[1].book_transaction === 'face_to_face'"><span class="text-medium">付款方式:</span> 面交</div>
             <div class="w-100 text-center py-1 px-2" v-if="doc[1].order_status === 'create_order'">
                 <span class="text-medium">訂單狀態:</span> 訂單成立
             </div>
@@ -18,44 +19,46 @@
             <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_ship'">
                 <span class="text-medium">訂單狀態:</span> 貨物運送中
             </div>
-
-            <div class="w-100 text-center py-1 px-2" v-else="doc[1].order_status === 'wait_for_buyer_rec'">
+            <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_buyer_rec'">
                 <span class="text-medium">訂單狀態:</span> 等待買家收貨
+            </div>
+            <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'order_ok'">
+                <span class="text-medium">訂單狀態:</span> 訂單已完成
             </div>
 
             <div class="w-100 text-center py-1 px-2"><span class="text-medium">訂單建立日期:</span> {{doc[1].order_date}}</div>
         </div>
         <div class="card-body">
             <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                <div v-bind:class="{'step':true, 'completed': true}">
+                <div v-bind:class="{'step':true, 'completed': create_order_flag}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-cart"></i></div>
                     </div>
-                    <h4 class="step-title">訂單成立</h4>
+                    <h4 class="step-title">{{ order_step_one }}</h4>
                 </div>
-                <div class="step ">
+                <div v-bind:class="{'step':true, 'completed': wait_for_seller_flag}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-config"></i></div>
                     </div>
-                    <h4 class="step-title">等待賣家確認訂單</h4>
+                    <h4 class="step-title">{{ order_step_two }}</h4>
                 </div>
-                <div class="step ">
+                <div v-bind:class="{'step':true, 'completed': wait_for_buyer_flag}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-medal"></i></div>
                     </div>
-                    <h4 class="step-title">等待買家付款</h4>
+                    <h4 class="step-title">{{ order_step_three }}</h4>
                 </div>
-                <div class="step">
+                <div v-bind:class="{'step':true, 'completed': wait_for_ship_flag}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-car"></i></div>
                     </div>
-                    <h4 class="step-title">貨物運送中</h4>
+                    <h4 class="step-title">{{ order_step_four }}</h4>
                 </div>
-                <div class="step">
+                <div v-bind:class="{'step':true, 'completed': wait_for_buyer_rec_flag}">
                     <div class="step-icon-wrap">
                         <div class="step-icon"><i class="pe-7s-home"></i></div>
                     </div>
-                    <h4 class="step-title">等待買家收貨</h4>
+                    <h4 class="step-title">{{ order_step_five }}</h4>
                 </div>
             </div>
         </div>
@@ -64,6 +67,9 @@
         <div class="custom-control custom-checkbox mr-3">
            <router-link class="btn btn-outline-primary btn-rounded btn-sm" :to="{ path: '/orderdetail', query: { order_id: doc[0]}}" data-toggle="modal" data-target="#orderDetails">訂單詳情</router-link>
         </div>
-        <div class="text-left text-sm-right"><router-link class="btn btn-outline-primary btn-rounded btn-sm" :to="{ path: '/transactionprocess', query: { order_id: order_id}}" data-toggle="modal" data-target="#orderDetails">結帳去</router-link></div>
+        <div class="text-left text-sm-right"  >
+            <button :disabled="btn_hidden_flag" @click="transactionProcess" class="btn btn-outline-primary btn-rounded btn-sm" data-toggle="modal" data-target="#orderDetails">{{btn_status}}</button>
+        </div>
     </div>
+    <VueQrcode id="qrcode" hidden="true" scale="8" :value="order_id"></VueQrcode>
 </div>

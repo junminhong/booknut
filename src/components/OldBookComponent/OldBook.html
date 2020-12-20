@@ -110,7 +110,7 @@
                                 </div>
                                 <ul class="social">
                                     <li><a href="#"><i class="fa fa-eye"></i></a></li>
-                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid)"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid, doc.data().book_transaction)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
 <!--                                <span class="product-new-label">New</span>-->
                             </div>
@@ -135,7 +135,8 @@
                                     <p></p>
                                     <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
                                     <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
-                                    <h6 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'face_to_face'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 面交</h6>
                                     <p></p>
                                     <div class="price">
                                         <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
@@ -166,7 +167,7 @@
                                 </div>
                                 <ul class="social">
                                     <li><a href="#"><i class="fa fa-eye"></i></a></li>
-                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid)"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid, doc.data().book_transaction)"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
 <!--                                <span class="product-new-label">New</span>-->
                             </div>

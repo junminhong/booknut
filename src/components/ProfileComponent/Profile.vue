@@ -364,17 +364,25 @@ export default {
                 this.user_new_password = ''
                 break
               case "general":
-                db.firestore().collection("users").doc(this.user.uid).update({
-                  user_name: this.user_name,
-                }).then(() => {
+                if (this.user_name === ''){
                   Swal.fire(
                       '變更暱稱訊息',
-                      "已成功變更暱稱",
-                      'success'
-                  ).then(()=>{
-                    location.href = 'profile'
+                      '暱稱請勿為空',
+                      'error'
+                  )
+                }else{
+                  db.firestore().collection("users").doc(this.user.uid).update({
+                    user_name: this.user_name,
+                  }).then(() => {
+                    Swal.fire(
+                        '變更暱稱訊息',
+                        "已成功變更暱稱",
+                        'success'
+                    ).then(()=>{
+                      location.href = 'profile'
+                    })
                   })
-                })
+                }
                 break
               case "socialist":
                 db.firestore().collection("users").doc(this.user.uid).update({

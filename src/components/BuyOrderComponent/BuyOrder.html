@@ -24,7 +24,7 @@
                         <tbody>
                         <tr v-for="doc in this.all_order_data">
                             <td style="width: 13%;">
-                                <router-link :to="{ path: '/transactionprocess', query: { order_id: doc.id}}" class="table-link">{{doc.id}}</router-link>
+                                <router-link :to="{ path: '/transactionprocess', query: { order_id: doc.id, status: 'buy'}}" class="table-link">{{doc.id}}</router-link>
                             </td>
                             <td class="text-center" v-if="doc.data().order_status === 'create_order'">
                                 <span class="badge bg-secondary text-light">訂單成立</span>
