@@ -72,13 +72,13 @@ export default {
     }
   },
   mounted() {
-
+    this.checkUserAccountStatus()
   },
-  watch: {
-    user: [{
-      handler: 'checkUserAccountStatus'
-    }]
-  },
+  // watch: {
+  //   user: [{
+  //     handler: 'checkUserAccountStatus'
+  //   }]
+  // },
   methods: {
     onCancel: function (){
       this.loading = false

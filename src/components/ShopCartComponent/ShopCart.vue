@@ -96,14 +96,14 @@ export default {
             let order_number = uid(10)
             let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
             db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).set({
-              order_status: 'create_order',
+              order_status: 'wait_for_seller',
               have_fare_money: have_fare_money,
               order_date: date,
               seller_id: seller_id,
               book_transaction: book_transaction
             })
             db.firestore().collection("users").doc(seller_id).collection("seller_order_list").doc(order_number).set({
-              order_status: 'create_order',
+              order_status: 'wait_for_seller',
               have_fare_money: have_fare_money,
               order_date: date,
               buyer_id: this.user.uid,

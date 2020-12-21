@@ -13,8 +13,8 @@ import db from "@/db";
 import TransactionProcess from "@/components/TransactionProcessComponent/TransactionProcess";
 import BuyOrder from "@/components/BuyOrderComponent/BuyOrder";
 import OrderDetail from "@/components/OrderDetailComponent/OrderDetail";
-
 import SellerOrder from "@/components/SellerOrderComponent/SellerOrder";
+import NutWallet from "@/components/NutWalletComponent/NutWallet";
 
 
 const routes = [
@@ -109,6 +109,12 @@ const routes = [
     path: '/sellerorder',
     name: 'SellerOrder',
     component: SellerOrder,
+    meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/nutwallet',
+    name: 'NutWallet',
+    component: NutWallet,
     meta: { requiresAuth: true, realDataAuth: true }
   }
 ]

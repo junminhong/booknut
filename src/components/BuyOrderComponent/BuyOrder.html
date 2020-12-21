@@ -35,11 +35,17 @@
                             <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_buyer'">
                                 <span class="badge bg-secondary text-light">等待買家付款</span>
                             </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_seller_send'">
+                                <span class="badge bg-secondary text-light">等待賣家出貨</span>
+                            </td>
                             <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_ship'">
                                 <span class="badge bg-secondary text-light">貨物運送中</span>
                             </td>
-                            <td class="text-center" v-else="doc.data().order_status === 'wait_for_buyer_rec'">
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_buyer_rec'">
                                 <span class="badge bg-secondary text-light">等待買家收貨</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().order_status === 'order_ok'">
+                                <span class="badge bg-secondary text-light">訂單已完成</span>
                             </td>
 
                             <td class="text-center" v-if="doc.data().have_fare_money === true">

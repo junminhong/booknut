@@ -15,6 +15,9 @@ export default {
       isSignin: false,
       is_real_data_user: false,
       shop_cart_amount: 0,
+      notify_amount: 0,
+      notify: [],
+      remove_flag: false,
     }
   },
   props: {
@@ -27,9 +30,43 @@ export default {
     }],
     user: [{
       handler: 'updateShopCartAmount'
-    }]
+    },{
+      handler: 'checkUserNotify'
+    }],
   },
   methods: {
+    checkUserNotify: function (){
+      let user = db.auth().currentUser
+      this.notify = []
+      console.log(user.uid)
+      let tutorialsRef = db.database().ref('/users_notify/' + user.uid);
+      tutorialsRef.on('value', snapshot => {
+        console.log(snapshot.numChildren())
+        this.notify_amount = snapshot.numChildren()
+        snapshot.forEach(value =>{
+          console.log(value)
+          this.notify.push(value)
+        })
+      });
+      // db.database().ref('users_notify/' + this.user.id).get().then(result=>{
+      //   console.log(result.key)
+      //   result.forEach(value=>{
+      //     console.log(value)
+      //   })
+      // })
+    },
+    gotoOrder: function (order_id, status){
+      if (!this.remove_flag){
+        console.log(order_id)
+        location.href = 'transactionprocess?status=' + status + '&order_id=' + order_id
+      }
+      this.remove_flag = false
+    },
+    removeNotify: function (notify_id){
+      console.log(notify_id)
+      this.remove_flag = true
+      db.database().ref('/users_notify/' + this.user.uid + '/' + notify_id).remove()
+    },
     hideSignInAndSignUp: function () {
       if (this.user === undefined || this.user === null || this.user === '') {
         this.isSignin = false

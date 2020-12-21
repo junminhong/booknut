@@ -6,6 +6,8 @@
 import db from "@/db";
 import VueQrcode from 'vue3-qrcode'
 import Swal from "sweetalert2";
+import { uid } from 'uid'
+let dateFormat = require("dateformat")
 export default {
   name: "TransactionProcess",
   data(){
@@ -36,6 +38,7 @@ export default {
   },
   mounted() {
     this.showOrderDetail()
+    this.checkOrderStatus()
   },
   watch:{
     order_id:[{
@@ -44,6 +47,22 @@ export default {
     ]
   },
   methods:{
+    checkOrderStatus: function (){
+      db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(this.order_id)
+          .onSnapshot({
+            // Listen for document metadata changes
+          }, doc=> {
+            console.log(doc.data().order_status)
+            if(doc.data().order_status === "wait_for_seller_send" && !doc.data().is_reload){
+              console.log("重整")
+              db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(this.order_id).update({
+                is_reload: true
+              }).then(()=>{
+                location.reload()
+              })
+            }
+          });
+    },
     showOrderDetail: function (){
       this.all_order = new Map()
       this.order_id = this.$route.query.order_id
@@ -67,10 +86,14 @@ export default {
                 this.btn_hidden_flag = true
               }else if (result.data().order_status === 'wait_for_seller'){
                 this.create_order_flag = true
+                this.btn_status = '等待賣家確認'
+                this.btn_hidden_flag = true
+              }else if (result.data().order_status === 'wait_for_buyer'){
+                this.create_order_flag = true
                 this.wait_for_seller_flag = true
                 this.btn_status = '付款去'
                 this.btn_hidden_flag = false
-              }else if (result.data().order_status === 'wait_for_buyer'){
+              }else if (result.data().order_status === 'wait_for_seller_send'){
                 this.create_order_flag = true
                 this.wait_for_seller_flag = true
                 this.wait_for_buyer_flag = true
@@ -147,26 +170,135 @@ export default {
       }else if (this.$route.query.status === 'sell'){
         db.firestore().collection("users").doc(this.user.uid).collection("seller_order_list").doc(this.order_id).get().then(result => {
           this.all_order.set(result.id, result.data())
-          if (result.data().order_status === 'create_order'){
-            this.btn_status = '確認訂單'
-            this.btn_hidden_flag = false
-          }else if (result.data().order_status === 'wait_for_seller'){
-            this.create_order_flag = true
-            this.wait_for_seller_flag = true
-            this.btn_status = '等待買家付款'
-            this.btn_hidden_flag = true
+          this.order_status = result.data().order_status
+          if (result.data().book_transaction === 'nut_coin_payment'){
+            if (result.data().order_status === 'create_order'){
+              this.create_order_flag = true
+              this.btn_status = '訂單成立'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_seller'){
+              this.create_order_flag = true
+              this.btn_status = '確認訂單'
+              this.btn_hidden_flag = false
+            }else if (result.data().order_status === 'wait_for_buyer'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.btn_status = '等待買家付款'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_seller_send'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.btn_status = '出貨去'
+              this.btn_hidden_flag = false
+            }else if (result.data().order_status === 'wait_for_ship'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.btn_status = '運送中'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_buyer_rec'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.wait_for_buyer_rec_flag = true
+              this.btn_status = '收貨去'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'order_ok'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.wait_for_buyer_rec_flag = true
+              this.btn_status = '訂單已完成'
+              this.btn_hidden_flag = true
+            }
+          }else{
+            this.order_step_four = '物品面交中'
+            if (result.data().order_status === 'create_order'){
+              this.create_order_flag = true
+              this.btn_status = '等待賣家確認'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_seller'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.btn_status = '付款去'
+              this.btn_hidden_flag = false
+            }else if (result.data().order_status === 'wait_for_buyer'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.btn_status = '等待賣家出貨'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_ship'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.btn_status = '運送中'
+              this.btn_hidden_flag = true
+            }else if (result.data().order_status === 'wait_for_buyer_rec'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.wait_for_buyer_rec_flag = true
+              this.btn_status = '收貨去'
+              this.btn_hidden_flag = false
+            }else if (result.data().order_status === 'order_ok'){
+              this.create_order_flag = true
+              this.wait_for_seller_flag = true
+              this.wait_for_buyer_flag = true
+              this.wait_for_ship_flag = true
+              this.wait_for_buyer_rec_flag = true
+              this.btn_status = '訂單已完成'
+              this.btn_hidden_flag = true
+            }
           }
         })
       }
     },
     transactionProcess: function (){
-      if (this.order_status === 'wait_for_seller' && this.all_order.get(this.order_id).book_transaction === 'nut_coin_payment'){
+      if (this.$route.query.status === 'buy' && this.order_status === 'wait_for_buyer' && this.all_order.get(this.order_id).book_transaction === 'nut_coin_payment'){
         // 付款
         let dataURL = document.getElementById('qrcode').src;
         Swal.fire({
           title: '請掃描下方QrCode進行付款',
           icon: 'info',
           html: '<img src="'+ dataURL + '"/>'
+        })
+      }else if(this.$route.query.status === 'sell' && this.order_status === 'wait_for_seller'){
+        db.firestore().collection("users").doc(this.user.uid).collection("seller_order_list").doc(this.order_id).update({
+          order_status: 'wait_for_buyer'
+        }).then(()=>{
+          let buyer_id = ''
+          db.firestore().collection("users").doc(this.user.uid).collection("seller_order_list").doc(this.order_id).get().then(result=>{
+            buyer_id = result.data().buyer_id
+          }).then(()=>{
+            db.firestore().collection("users").doc(buyer_id).collection("order_list").doc(this.order_id).update({
+              order_status: 'wait_for_buyer'
+            }).then(()=>{
+              Swal.fire(
+                  '訂單訊息',
+                  '確認訂單成功，已通知買家進行付款',
+                  'success'
+              ).then(()=>{
+                let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
+                db.database().ref('users_notify/' + buyer_id  + '/' + uid(10)).update({
+                  msg: '訂單已被賣家確認，請前往付款',
+                  msg_date: date,
+                  order_id: this.order_id,
+                  status: 'buy'
+                })
+                this.create_order_flag = true
+                this.wait_for_seller_flag = true
+                this.btn_status = '等待買家付款'
+                this.btn_hidden_flag = true
+              })
+            })
+          })
         })
       }
     }

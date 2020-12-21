@@ -1,5 +1,5 @@
-
-<div class="container padding-bottom-3x mb-1" style="margin-top: 30px;" v-for="doc in this.all_order">
+<div>
+    <div class="container padding-bottom-3x mb-1" style="margin-top: 30px;" v-for="doc in this.all_order">
     <div class="card mb-3">
         <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">訂單編號 - </span><span class="text-medium">{{doc[0]}}</span></div>
         <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
@@ -15,14 +15,16 @@
             <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_buyer'">
                 <span class="text-medium">訂單狀態:</span> 等待買家付款
             </div>
-
+            <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_seller_send'">
+                <span class="text-medium">訂單狀態:</span> 等待賣家出貨
+            </div>
             <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_ship'">
                 <span class="text-medium">訂單狀態:</span> 貨物運送中
             </div>
             <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'wait_for_buyer_rec'">
                 <span class="text-medium">訂單狀態:</span> 等待買家收貨
             </div>
-            <div class="w-100 text-center py-1 px-2" v-else-if="doc[1].order_status === 'order_ok'">
+            <div class="w-100 text-center py-1 px-2" v-else="doc[1].order_status === 'order_ok'">
                 <span class="text-medium">訂單狀態:</span> 訂單已完成
             </div>
 
@@ -65,11 +67,12 @@
     </div>
     <div class="d-flex flex-wrap flex-md-nowrap justify-content-center justify-content-sm-between align-items-center">
         <div class="custom-control custom-checkbox mr-3">
-           <router-link class="btn btn-outline-primary btn-rounded btn-sm" :to="{ path: '/orderdetail', query: { order_id: doc[0]}}" data-toggle="modal" data-target="#orderDetails">訂單詳情</router-link>
+            <router-link class="btn btn-outline-primary btn-rounded btn-sm" :to="{ path: '/orderdetail', query: { order_id: doc[0]}}" data-toggle="modal" data-target="#orderDetails">訂單詳情</router-link>
         </div>
         <div class="text-left text-sm-right"  >
             <button :disabled="btn_hidden_flag" @click="transactionProcess" class="btn btn-outline-primary btn-rounded btn-sm" data-toggle="modal" data-target="#orderDetails">{{btn_status}}</button>
         </div>
     </div>
     <VueQrcode id="qrcode" hidden="true" scale="8" :value="order_id"></VueQrcode>
+</div>
 </div>

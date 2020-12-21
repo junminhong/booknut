@@ -1,0 +1,42 @@
+<div>
+    <div class="row" style="margin-top: 30px; width: 100%">
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+
+        </div>
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <center class="m-t-30">
+                        <!--                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle" width="150">-->
+                        <!--                        <h4 class="card-title m-t-10">John Doe</h4>-->
+                        <!--                        <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>-->
+                        <!--                        <div class="row text-center justify-content-md-center">-->
+                        <!--                            <div class="col-4"><a href="javascript:void(0)" class="link"><i class="fa fa-user"></i> <font class="font-medium">254</font></a></div>-->
+                        <!--                            <div class="col-4"><a href="javascript:void(0)" class="link"><i class="fa fa-image"></i> <font class="font-medium">54</font></a></div>-->
+                        <!--                        </div>-->
+                        <div class="alert alert-secondary" role="alert">
+                            <div style="text-align: left">錢包地址:</div><p></p>
+                            <VueQrcode style="text-align: center" id="qrcode" scale="5" :value="nut_wallet_address"></VueQrcode>
+                        </div>
+                        <div class="alert alert-primary" role="alert" style="text-align: left">
+                            錢包餘額：{{nut_wallet_money}}
+                            <p></p>
+                            錢包狀態：<span class="badge badge-danger" v-if="nut_wallet_status === 'block'">鎖住</span>
+                            <span class="badge badge-success" v-else="nut_wallet_status === 'ok'">正常</span>
+                        </div>
+
+                        <p></p>
+                        <a href="scanqrcode"><button type="button" class="btn btn-primary" style="width: 100%"><i class="fa fa-camera"></i> 掃描QrCode</button></a>
+                        <p></p>
+                        <input class="form-control" type="number" v-model="want_nut_count" placeholder="儲值堅果幣(Demo用)" />
+                        <p></p>
+                        <button type="button" class="btn btn-primary" @click="giveNutMoneyToWallet" style="width: 100%"><i class="fa fa-credit-card"></i> 請給我堅果幣(Demo用)</button>
+                        <p></p>
+                        <button type="button" class="btn btn-primary" style="width: 100%"><i class="fa fa-search"></i> 錢包紀錄查詢</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
