@@ -15,6 +15,7 @@ import BuyOrder from "@/components/BuyOrderComponent/BuyOrder";
 import OrderDetail from "@/components/OrderDetailComponent/OrderDetail";
 import SellerOrder from "@/components/SellerOrderComponent/SellerOrder";
 import NutWallet from "@/components/NutWalletComponent/NutWallet";
+import NutWalletRecord from "@/components/NutWalletRecordComponent/NutWalletRecord";
 
 
 const routes = [
@@ -115,6 +116,12 @@ const routes = [
     path: '/nutwallet',
     name: 'NutWallet',
     component: NutWallet,
+    meta: { requiresAuth: true, realDataAuth: true }
+  },
+  {
+    path: '/nutwalletrecord',
+    name: 'NutWalletRecord',
+    component: NutWalletRecord,
     meta: { requiresAuth: true, realDataAuth: true }
   }
 ]

@@ -4,7 +4,6 @@
 
 <script>
 import db from "@/db";
-
 export default {
   name: "header-component",
   mounted() {
@@ -37,14 +36,11 @@ export default {
   methods: {
     checkUserNotify: function (){
       let user = db.auth().currentUser
-      this.notify = []
-      console.log(user.uid)
-      let tutorialsRef = db.database().ref('/users_notify/' + user.uid);
+      let tutorialsRef = db.database().ref('/users_notify/' + user.uid)
       tutorialsRef.on('value', snapshot => {
-        console.log(snapshot.numChildren())
+        this.notify = []
         this.notify_amount = snapshot.numChildren()
         snapshot.forEach(value =>{
-          console.log(value)
           this.notify.push(value)
         })
       });

@@ -192,7 +192,8 @@
                                     <p></p>
                                     <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
                                     <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
-                                    <h6 class="" v-else="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'face_to_face'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 面交</h6>
                                     <p></p>
                                     <div class="price">
                                         <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}

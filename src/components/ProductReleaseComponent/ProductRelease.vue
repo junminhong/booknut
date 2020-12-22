@@ -128,7 +128,7 @@ export default {
       }
     },
     editProductA: function (storageRef_one, storageRef_two){
-      let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
+      let date = dateFormat(db.firestore.Timestamp.seconds, "yyyy-mm-dd HH:mm:ss")
       storageRef_one.getDownloadURL().then( result => {
         this.storageRef_one_result = result
       }).then(()=>{
@@ -310,7 +310,7 @@ export default {
     releaseProduct: function (){
       this.is_uploading = true
       this.product_uuid = uid(32)
-      let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
+      let date = dateFormat(db.firestore.Timestamp.seconds, "yyyy-mm-dd HH:mm:ss")
       let storageRef_one = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_uuid + "1.jpg")
       let storageRef_two = db.storage().ref("release_product_pic/" + this.book_classification + "/" + this.product_uuid + "2.jpg")
       if (this.user != null){

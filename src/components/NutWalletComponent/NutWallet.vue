@@ -49,7 +49,7 @@ export default {
           db.firestore().collection("users").doc(this.user.uid).update({
             user_bunt_wallet_money: parseInt(this.nut_wallet_money) + parseInt(this.want_nut_count)
           })
-          let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
+          let date = dateFormat(db.firestore.Timestamp.seconds, "yyyy-mm-dd HH:mm:ss")
           db.firestore().collection("users").doc(this.user.uid).collection("wallet_record").doc(uid(10)).set({
             wallet_address_from: 'system',
             wallet_owner_from: 'system',
@@ -58,7 +58,9 @@ export default {
             record_money: this.want_nut_count,
             record_date: date,
             record_status: 'demo', // order, demo
-            record_order_id: ''
+            record_ok: 'ok',
+            record_order_id: '',
+            record_check_out_date: date
           }).then(()=>{
             Swal.fire(
                 '堅果幣儲值訊息',

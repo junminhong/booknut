@@ -16,7 +16,7 @@
                         <!--                        </div>-->
                         <div class="alert alert-secondary" role="alert">
                             <div style="text-align: left">錢包地址:</div><p></p>
-                            <VueQrcode style="text-align: center" id="qrcode" scale="5" :value="nut_wallet_address"></VueQrcode>
+                            <VueQrcode style="text-align: center" id="qrcode" scale="4" :value="nut_wallet_address"></VueQrcode>
                         </div>
                         <div class="alert alert-primary" role="alert" style="text-align: left">
                             錢包餘額：{{nut_wallet_money}}
@@ -26,13 +26,13 @@
                         </div>
 
                         <p></p>
-                        <a href="scanqrcode"><button type="button" class="btn btn-primary" style="width: 100%"><i class="fa fa-camera"></i> 掃描QrCode</button></a>
+                        <a href="scanqrcode"><button type="button" class="btn btn-primary" :disabled="nut_wallet_status === 'block'" style="width: 100%"><i class="fa fa-camera"></i> 掃描QrCode</button></a>
                         <p></p>
-                        <input class="form-control" type="number" v-model="want_nut_count" placeholder="儲值堅果幣(Demo用)" />
+                        <input class="form-control" type="number" v-model="want_nut_count" :disabled="nut_wallet_status === 'block'" placeholder="儲值堅果幣(Demo用)" />
                         <p></p>
-                        <button type="button" class="btn btn-primary" @click="giveNutMoneyToWallet" style="width: 100%"><i class="fa fa-credit-card"></i> 請給我堅果幣(Demo用)</button>
+                        <button type="button" class="btn btn-primary" @click="giveNutMoneyToWallet" :disabled="nut_wallet_status === 'block'" style="width: 100%"><i class="fa fa-credit-card"></i> 請給我堅果幣(Demo用)</button>
                         <p></p>
-                        <button type="button" class="btn btn-primary" style="width: 100%"><i class="fa fa-search"></i> 錢包紀錄查詢</button>
+                        <a href="nutwalletrecord" ><button type="button" :disabled="nut_wallet_status === 'block'" class="btn btn-primary" style="width: 100%"><i class="fa fa-search"></i> 錢包紀錄查詢</button></a>
                     </center>
                 </div>
             </div>

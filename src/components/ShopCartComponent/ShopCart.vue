@@ -55,7 +55,7 @@ export default {
                 shop_cart_product.push(product_snap_shot.val())
                 this.total_money += parseInt(product_snap_shot.val().book_money)
               })
-              this.total_money += 60
+              this.total_money += this.fare_money
               all_shop_cart_product.set(snap_shot.key + ',' + snap_shot_next.key, shop_cart_product)
               this.all_shop_cart_product = all_shop_cart_product
             })
@@ -64,11 +64,17 @@ export default {
       })
     },
     useDiscountCode: function (){
-      if (this.discountCode === 'booknut'){
+      if (this.discountCode === 'booknut' && this.fare_money !== 0){
         this.is_use_discount_code = true
         this.fare_discount_money = '$ ' + this.fare_money
         this.total_money -= this.fare_money
         this.fare_money = 0
+      }else{
+        Swal.fire(
+            '折扣碼訊息',
+            '已經免運，無需再使用折扣',
+            'info'
+        )
       }
     },
     gotoTransaction: function (){
@@ -94,7 +100,7 @@ export default {
               have_fare_money = false
             }
             let order_number = uid(10)
-            let date = dateFormat(new Date(), "yyyy-mm-dd HH:mm:ss")
+            let date = dateFormat(db.firestore.Timestamp.seconds, "yyyy-mm-dd HH:mm:ss")
             db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).set({
               order_status: 'wait_for_seller',
               have_fare_money: have_fare_money,
@@ -108,6 +114,14 @@ export default {
               order_date: date,
               buyer_id: this.user.uid,
               book_transaction: book_transaction
+            }).then(()=>{
+              let date = dateFormat(db.firestore.Timestamp.seconds, "yyyy-mm-dd HH:mm:ss")
+              db.database().ref('users_notify/' + seller_id  + '/' + uid(10)).update({
+                msg: '訂單已成立，請盡快前往確認訂單',
+                msg_date: date,
+                order_id: order_number,
+                status: 'sell'
+              })
             })
             value.forEach((result, key)=>{
               db.firestore().collection("users").doc(this.user.uid).collection("order_list").doc(order_number).collection("shop_cart").doc(key.toString()).set({
@@ -161,7 +175,7 @@ export default {
         tutorialsRef.get().then(result=>{
           if (result.numChildren() === 0){
             if(this.is_ok_flag) {
-              location.href = 'transactionprocess'
+              location.href = 'buyorder'
             }
           }
         })

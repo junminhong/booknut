@@ -234,14 +234,12 @@ export default {
     },
     realVerificationType: function (){
       this.type = "real_verification"
-      let user = db.auth().currentUser;
-      console.log(this.user.phoneNumber)
       if (this.user.phoneNumber !== '' && this.user.phoneNumber !== null){
         let taiwan_phone_number = '0' + this.user.phoneNumber.slice(4, 14)
         this.user_phone = taiwan_phone_number
         this.is_have_user_phone_number = true
       }
-      db.firestore().collection("users").doc(user.uid).get().then(resault => {
+      db.firestore().collection("users").doc(this.user.uid).get().then(resault => {
         if(resault.data().user_real_name === undefined){
           this.can_create_user_real_data = true
         }else{

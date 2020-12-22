@@ -38,11 +38,18 @@ export default {
             }
           }).catch( error => {
             console.log(error)
-            db.firestore().collection('users').doc(this.user_uid).set({
+            db.firestore().collection('users').doc(this.user_uid).update({
               user_name: 'booknut',
               accept_user: true
             }).then(()=>{
               location.href = '/'
+            }).catch(()=>{
+              db.firestore().collection('users').doc(this.user_uid).set({
+                user_name: 'booknut',
+                accept_user: true
+              }).then(()=>{
+                location.href = '/'
+              })
             })
           })
         }else{
