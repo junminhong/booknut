@@ -1,0 +1,92 @@
+
+<div class="container-fuild" style="margin-top: 30px; margin-right: 30px; margin-left: 30px">
+    <div class="form-group col-md-4" style="text-align: left">
+        <label for="inputState">欲查詢訂單狀態</label>
+        <select id="inputState" v-model="order_search_type" class="form-control">
+            <option selected value="not_ok">未完成</option>
+            <option value="ok">已完成</option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <thead>
+                        <tr>
+                            <th><span>編號</span></th>
+                            <th><span>狀態</span></th>
+                            <th><span>有無運費</span></th>
+                            <th><span>建立日期</span></th>
+                            <th><span>訂單完成日期</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="doc in this.all_order_data">
+                            <td style="width: 13%;">
+                                <router-link :to="{ path: '/transactionprocess', query: { order_id: doc.id, status: 'buy'}}" class="table-link">{{doc.id}}</router-link>
+                            </td>
+                            <td class="text-center" v-if="doc.data().order_status === 'create_order'">
+                                <span class="badge bg-secondary text-light">訂單成立</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_seller'">
+                                <span class="badge bg-secondary text-light">等待賣家確認訂單</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_buyer'">
+                                <span class="badge bg-secondary text-light">等待買家付款</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_seller_send'">
+                                <span class="badge bg-secondary text-light">等待賣家出貨</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_ship'">
+                                <span class="badge bg-secondary text-light">貨物運送中</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().order_status === 'wait_for_buyer_rec'">
+                                <span class="badge bg-secondary text-light">等待買家收貨</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().order_status === 'order_ok'">
+                                <span class="badge bg-secondary text-light">訂單已完成</span>
+                            </td>
+
+                            <td class="text-center" v-if="doc.data().have_fare_money === true">
+                                <span class="badge badge-success">有</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().have_fare_money === false">
+                                <span class="badge badge-info">沒有</span>
+                            </td>
+                            <td >
+                                {{doc.data().order_date}}
+                            </td>
+                            <td>
+                                {{doc.data().complete_order_date}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center">
+
+    </div>
+    <div style="text-align: center" >
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item" v-for="index in this.total_index"><a class="page-link" href="#">{{ index }}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,32 +1,37 @@
-<div style="max-width: 800px; width: 100%;background-color: white; border: 1px solid; box-shadow:3px 3px 12px gray; padding:50px; margin: 50px auto;" class="container">
-    <div style="text-align: center; margin-bottom: 20px">
-        <img style="width: 150px; height: 100px" src="../../assets/imgs/png/BNUT.png">
-    </div>
-    <form class="needs-validation container" name="user_signin_form" novalidate data-toggle="validator" style="text-align: left">
-        <div class="form-group">
-            <label for="user_email">Email address</label>
-            <input type="email" class="form-control" v-model="user_email" id="user_email" aria-describedby="emailHelp" placeholder="請輸入你的電子信箱" required="required">
-            <div class="help-block with-errors" style="color: red;">{{ user_email_error_msg }}</div>
+<div>
+    <div style="max-width: 800px; width: 100%;background-color: white; border: 1px solid; box-shadow:3px 3px 12px gray; padding:50px; margin: 50px auto;"  class="container">
+        <div style="text-align: center; margin-bottom: 20px">
+            <img style="width: 150px; height: 100px" src="../../assets/imgs/png/BNUT.png">
         </div>
-        <div class="form-group">
-            <label for="user_password">Password</label>
-            <input type="password" class="form-control" v-model="user_password" id="user_password" placeholder="請輸入你的密碼" required="required">
-            <div class="help-block with-errors" style="color: red;">{{ user_password_error_msg }}</div>
-        </div>
-        <div class="form-group">
-            <a href="#"><label>忘記密碼?</label></a>
-        </div>
-        <div style="text-align: center;">
-            <button type="button" @click="signin" class="btn btn-primary" style="text-align: center">SIGN IN</button>
-            <div class="form-group" style="padding-top: 10px">
-                <label>Connect with:</label><br>
-                <img src="{{asset('imgs/png/google.png')}}" width="30px" height="30px"/>
-                <img src="{{asset('imgs/png/facebook.png')}}" width="30px" height="30px"/>
+        <form class="needs-validation container" name="user_signin_form" novalidate data-toggle="validator" style="text-align: left">
+            <div class="form-group">
+                <label for="user_email">Email address</label>
+                <input type="email" class="form-control" v-model="user_email" id="user_email" aria-describedby="emailHelp" placeholder="請輸入你的電子信箱" required="required">
+                <div class="help-block with-errors" style="color: red;">{{ user_email_error_msg }}</div>
             </div>
-        </div>
-        <hr>
-        <div style="text-align: center">
-            <label>No any Account? <a href="register">SIGN UP</a></label>
-        </div>
-    </form>
+            <div class="form-group">
+                <label for="user_password">Password</label>
+                <input type="password" class="form-control" v-model="user_password" id="user_password" placeholder="請輸入你的密碼" required="required">
+                <div class="help-block with-errors" style="color: red;">{{ user_password_error_msg }}</div>
+            </div>
+            <div class="form-group">
+                <a href="javascript:void(0)" @click="forgetPassword"><label>忘記密碼?</label></a>
+            </div>
+            <div class="form-group">
+                <a href="javascript:void(0)" @click="resendEmailVerified"><label>沒有收到信?</label></a>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" @click="signin" class="btn btn-primary" style="text-align: center">SIGN IN</button>
+                <div class="form-group" style="padding-top: 10px">
+                    <label>Connect with:</label><br>
+                    <a @click="signinWithGoogle" class="fa fa-google"><img src="{{asset('imgs/png/facebook.png')}}" width="30px" height="30px"/></a>
+                </div>
+            </div>
+            <hr>
+            <div style="text-align: center">
+                <label>No any Account? <a href="signup">SIGN UP</a></label>
+            </div>
+        </form>
+    </div>
 </div>
+

@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>logo.ico">
     <title><%= htmlWebpackPlugin.options.title %>-最好玩的書籍中心</title>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <script src="https://unpkg.com/vue@next"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Include a polyfill for ES6 Promises (optional) for IE11 -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!--    <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>-->
+
 </head>
 <body>
 <noscript>
@@ -25,17 +27,18 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-<!--&lt;!&ndash; The core Firebase JS SDK is always required and must be listed first &ndash;&gt;-->
-<!--<script src="/__/firebase/8.1.1/firebase-app.js"></script>-->
+<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
-<!--&lt;!&ndash; TODO: Add SDKs for Firebase products that you want to use-->
-<!--     https://firebase.google.com/docs/web/setup#available-libraries &ndash;&gt;-->
-<!--<script src="/__/firebase/8.1.1/firebase-analytics.js"></script>-->
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<!--<script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>-->
+
+<!--&lt;!&ndash; If you enabled Analytics in your project, add the Firebase SDK for Analytics &ndash;&gt;-->
+<!--<script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-analytics.js"></script>-->
+
 <!--&lt;!&ndash; Add Firebase products that you want to use &ndash;&gt;-->
-<!--<script src="/__/firebase/8.1.1/firebase-auth.js"></script>-->
-<!--<script src="/__/firebase/8.1.1/firebase-firestore.js"></script>-->
-<!--&lt;!&ndash; Initialize Firebase &ndash;&gt;-->
-<!--<script src="/__/firebase/init.js"></script>-->
+<!--<script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>-->
+<!--<script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-firestore.js"></script>-->
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 </html>
 <!--
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

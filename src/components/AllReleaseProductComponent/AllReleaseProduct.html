@@ -1,0 +1,173 @@
+
+<div class="container-fuild" style="margin-top: 30px; margin-right: 30px; margin-left: 30px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <thead>
+                        <tr>
+                            <th><span>產品</span></th>
+                            <th><span>分類</span></th>
+                            <th><span>狀態</span></th>
+                            <th><span>描述</span></th>
+                            <th><span>出版社</span></th>
+                            <th><span>出版日期</span></th>
+                            <th><span>金額</span></th>
+                            <th><span>交易方式</span></th>
+                            <th><span>寄貨方式</span></th>
+                            <th><span>出貨天數</span></th>
+                            <th><span>發佈日期</span></th>
+                            <th><span>更新日期</span></th>
+                            <th><span>功能</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="doc in this.all_doc_data">
+                            <td style="width: 13%;">
+                                <img v-bind:src="doc.data().product_one_img_url" id="book_img_url" alt="">
+                                <span class="user-link">{{doc.data().book_name}}</span>
+                                <span class="user-subhead">{{doc.data().book_isbn}}</span>
+                            </td>
+                            <td class="text-center" v-if="doc.data().book_classification === 'exam_book'">
+                                <span class="badge bg-secondary text-light">考試用書</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'professional_book'">
+                                <span class="badge bg-secondary text-light">專業教科書</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'computer_book'">
+                                <span class="badge bg-secondary text-light">語言電腦</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'religious_humanities_book'">
+                                <span class="badge bg-secondary text-light">宗教人文</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'art_design_book'">
+                                <span class="badge bg-secondary text-light">藝術設計</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'travel_fool_book'">
+                                <span class="badge bg-secondary text-light">旅遊飲食</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'parent_child_book'">
+                                <span class="badge bg-secondary text-light">親子童書</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_classification === 'comic_novel_book'">
+                                <span class="badge bg-secondary text-light">漫畫小說</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().book_classification === 'business_finance_book'">
+                                <span class="badge bg-secondary text-light">商業理財</span>
+                            </td>
+
+                            <td class="text-center" v-if="doc.data().book_status === 'new'">
+                                <span class="badge badge-success">全新未拆</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_status === 'nine_new'">
+                                <span class="badge badge-info">九成新</span>
+                            </td>
+                            <td class="text-center" v-else-if="doc.data().book_status === 'eight_new'">
+                                <span class="badge badge-warning">八成新</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().book_status === 'old'">
+                                <span class="badge badge-danger">有點久遠了</span>
+                            </td>
+                            <td>
+                                {{doc.data().book_description}}
+                            </td>
+                            <td >
+                               {{doc.data().book_publishing_house}}
+                            </td>
+                            <td>
+                               {{doc.data().book_publishing_date}}
+                            </td>
+                            <td>
+                               ${{doc.data().book_money}}
+                            </td>
+                            <td v-if="doc.data().book_transaction === 'cash_on_delivery'">
+                               貨到付款
+                            </td>
+                            <td v-else-if="doc.data().book_transaction === 'nut_coin_payment'">
+                                堅果幣支付
+                            </td>
+                            <td v-else-if="doc.data().book_transaction === 'swipe_online'">
+                                信用卡支付
+                            </td>
+                            <td v-else="doc.data().book_transaction === 'face_to_face'">
+                                面交
+                            </td>
+                            <td v-if="doc.data().book_shipment === 'seven_eleven'">
+                                7-11物流
+                            </td>
+                            <td v-else-if="doc.data().book_shipment === 'family'">
+                                全家物流
+                            </td>
+                            <td v-else-if="doc.data().book_shipment === 'alone_seller'">
+                                賣家自行宅配
+                            </td>
+                            <td v-else="doc.data().book_shipment === 'black_cat'">
+                                黑貓宅急便
+                            </td>
+                            <td v-if="doc.data().book_shipment_date === 'three_days'">
+                                三日內
+                            </td>
+                            <td v-else-if="doc.data().book_shipment_date === 'seven_days'">
+                                七日內
+                            </td>
+                            <td v-else="doc.data().book_shipment_date === 'long_days'">
+                                較長出貨日
+                            </td>
+                            <td>
+                                {{doc.data().release_time}}
+                            </td>
+                            <td>
+                                {{doc.data().update_time}}
+                            </td>
+                            <td style="width: 10%;">
+                                <!--                                <a href="#" class="table-link">-->
+                                <!--									<span class="fa-stack">-->
+                                <!--										<i class="fa fa-square fa-stack-2x"></i>-->
+                                <!--										<i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>-->
+                                <!--									</span>-->
+                                <!--                                </a>-->
+                                <router-link :to="{ path: '/release', query: { product_id: doc.id}}" class="table-link">
+									<span class="fa-stack">
+										<i class="fa fa-square fa-stack-2x"></i>
+										<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+									</span>
+                                </router-link>
+                                <a class="table-link danger" @click="removeProduct(doc.id, doc.data().book_classification)">
+									<span class="fa-stack">
+										<i class="fa fa-square fa-stack-2x"></i>
+										<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+									</span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center">
+
+    </div>
+    <div style="text-align: center" >
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item" v-for="index in this.total_index"><a class="page-link" href="#">{{ index }}</a></li>
+
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

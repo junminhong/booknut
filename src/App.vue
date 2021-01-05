@@ -1,17 +1,19 @@
 <template>
-  <header-component :user_name="user_name" />
-  <router-view/>
+  <header-component :user_name="user_name" :user="user"/>
+  <router-view :user="user"  style="min-height: 1080px"/>
+  <Footer></Footer>
 </template>
 
 <script>
-import HeaderComponent from '@/components/HeaderComponent/index'
+import HeaderComponent from '@/components/HeaderComponent/Header'
+import Footer from "@/components/FooterComponent/Footer";
 import db from "@/db";
-import Swal from "sweetalert2";
 
 export default {
   name: 'app',
   components:{
-    HeaderComponent
+    HeaderComponent,
+    Footer
   },
   mounted() {
     this.checkUserStatus()
@@ -20,33 +22,41 @@ export default {
     return{
       user_cer: db.auth().currentUser,
       user_uid: '',
-      user_name: ''
+      user_name: '',
+      user: [],
     }
   },
   methods: {
     checkUserStatus: function (){
       db.auth().onAuthStateChanged(user =>{
-        if (user != null){
-          console.log(user)
+        if (user != null && user.emailVerified){
           this.user_uid = user.uid
+          this.user = user
           db.firestore().collection('users').doc(this.user_uid).get().then(doc=>{
-            this.user_name = doc.data().user_name
+            if (doc.data().user_name.toString().length != 0){
+              this.user_name = doc.data().user_name
+            }
+          }).catch( error => {
+            console.log(error)
+            db.firestore().collection('users').doc(this.user_uid).update({
+              user_name: 'booknut',
+              accept_user: true
+            }).then(()=>{
+              location.href = '/'
+            }).catch(()=>{
+              db.firestore().collection('users').doc(this.user_uid).set({
+                user_name: 'booknut',
+                accept_user: true
+              }).then(()=>{
+                location.href = '/'
+              })
+            })
           })
         }else{
           this.user_uid = ''
           this.user_name =  ''
         }
       })
-      db.auth().getRedirectResult().then(function(result) {
-        if (result.credential) {
-          console.log(result.credential.accessToken)
-          console.log(result.user)
-          Swal.fire("成功")
-        }
-      }).catch(function(error) {
-        console.log(error)
-        Swal.fire("error")
-      });
     }
   }
 }

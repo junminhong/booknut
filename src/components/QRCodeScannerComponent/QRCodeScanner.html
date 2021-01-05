@@ -1,0 +1,22 @@
+<div>
+    <div>
+<!--        <p class="decode-result">Last result: <b>{{ result }}</b></p>-->
+        <div class="alert alert-primary" role="alert">
+            請對準QRCODE進行付款
+        </div>
+<!--        <button class="btn  btn-primary" @click="onDecode('e33f289e4b')">測試用</button>-->
+        <qr-stream :camera="camera" @decode="onDecode" @init="onInit">
+<!--            <div v-if="validationSuccess" class="validation-success">-->
+<!--                This is a URL-->
+<!--            </div>-->
+
+<!--            <div v-if="validationFailure" class="validation-failure">-->
+<!--                This is NOT a URL!-->
+<!--            </div>-->
+
+            <div v-if="validationPending" class="validation-pending">
+                等待付款中
+            </div>
+        </qr-stream>
+    </div>
+</div>

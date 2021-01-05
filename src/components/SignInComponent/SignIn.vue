@@ -3,10 +3,8 @@
 </template>
 
 <script>
-
 import Swal from "sweetalert2";
 import db from "@/db";
-
 
 export default {
   name: "SignIn-component",
@@ -15,7 +13,8 @@ export default {
       user_email: "",
       user_password: "",
       user_email_error_msg: "",
-      user_password_error_msg: ""
+      user_password_error_msg: "",
+      user: ''
     }
   },
   methods: {
@@ -47,9 +46,58 @@ export default {
               }else{
                 location.href = '/'
               }
+              this.user = data
               console.log(data.user.emailVerified)
             }).catch(function (error){
               console.log(error)
+          Swal.fire(
+              '登入訊息',
+              '登入失敗！',
+              'error'
+          )
+        })
+      }
+    },
+    signinWithGoogle: function (){
+      const googleProvider = new db.auth.GoogleAuthProvider()
+      db.auth().signInWithRedirect(googleProvider).then(() => {
+        location.href = '/'
+      }).catch(()=>{
+        db.auth().signInWithPopup(googleProvider).then(() => {
+          location.href = '/'
+        })
+      })
+    },
+    forgetPassword: function (){
+      if (this.user_email === ''){
+        Swal.fire(
+            "忘記密碼訊息",
+            "電子信箱欄位請勿為空",
+            "info"
+        )
+      }else{
+        db.auth().sendPasswordResetEmail(this.user_email)
+      }
+    },
+    resendEmailVerified: function (){
+      if (this.user_email === '' && this.user_password === ''){
+        Swal.fire(
+            "重發驗證信訊息",
+            "電子信箱欄位或者密碼欄位請勿為空",
+            "info"
+        )
+      }else{
+        db.auth().signInWithEmailAndPassword(this.user_email, this.user_password).then(
+            data => {
+              data.user.sendEmailVerification().then(()=>{
+                Swal.fire(
+                    "重發驗證信訊息",
+                    "驗證信已重發成功，請儘速至信箱查看",
+                    "success"
+                )
+              })
+            }).catch(function (error){
+          console.log(error)
         })
       }
     }

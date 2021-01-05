@@ -1,0 +1,211 @@
+<div class="container" style="margin-top: 30px; text-align: left">
+    <div class="row">
+        <div class="col-sm-3 hidden-xs">
+            <div class="list-group">
+                <a href="javascript:void(0)" @click="examType" class="list-group-item">考試用書</a>
+                <a href="javascript:void(0)" @click="professionalType" class="list-group-item">專業教科書</a>
+                <a href="javascript:void(0)" @click="computerType" class="list-group-item">語言電腦</a>
+                <a href="javascript:void(0)" @click="religiousHumanities" class="list-group-item">宗教人文</a>
+                <a href="javascript:void(0)" @click="artDesign" class="list-group-item">藝術設計</a>
+                <a href="javascript:void(0)" @click="travelFool" class="list-group-item">旅遊飲食</a>
+                <a href="javascript:void(0)" @click="parentChild" class="list-group-item">親子童書</a>
+                <a href="javascript:void(0)" @click="comicNovel" class="list-group-item">漫畫小說</a>
+                <a href="javascript:void(0)" @click="businessFinance" class="list-group-item">商業理財</a>
+            </div>
+
+            <div class="product-sidebar" style="margin-top: 30px">
+                <h5 class="text-center">你可能喜歡</h5>
+                <!-- Featured Product Item -->
+                <div class="product-item">
+                    <div class="image">
+                        <a href="#"><img src="../../assets/imgs/png/demobook.png" alt="Product 4"></a>
+                    </div>
+                    <div class="name">
+                        <a href="#">我是推薦書籍</a>
+                    </div>
+                    <div class="price">
+                        <span>$722.00</span>
+                    </div>
+                </div>
+                <!--/ Featured Product Item -->
+
+                <!-- Featured Product Item -->
+                <div class="product-item">
+                    <div class="image">
+                        <a href="#"><img src="../../assets/imgs/png/demobook.png" alt="Product 2"></a>
+                    </div>
+                    <div class="name">
+                        <a href="#">我是推薦書籍</a>
+                    </div>
+                    <div class="price">
+                        <span class="price-new">$866.00</span>
+                    </div>
+                </div>
+                <!--/ Featured Product Item -->
+
+                <!-- Featured Product Item -->
+                <div class="product-item">
+                    <div class="image">
+                        <a href="#"><img src="../../assets/imgs/png/demobook.png" alt="Product 3"></a>
+                    </div>
+                    <div class="name">
+                        <a href="#">我是推薦書籍</a>
+                    </div>
+                    <div class="price">
+                        <span>$962.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="btn-group hidden-xs">
+                        <button type="button" @click="sortListType" id="list-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="List View"><i class="fa fa-th-list"></i></button>
+                        <button type="button" @click="sortGridType" id="grid-view" class="btn btn-default" data-toggle="tooltip" data-container="body" title="Grid View"><i class="fa fa-th"></i></button>
+                    </div>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <label class="control-label" for="input-sort">排序:</label>
+                </div>
+                <div class="col-sm-2 text-right">
+                    <select id="input-sort" class="form-control">
+                        <option value="" selected="selected">預設</option>
+                        <option value="">價錢最高至最低</option>
+                        <option value="">價錢最低至最高</option>
+                        <option value="">上架日期</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <label class="control-label">顯示:</label>
+                </div>
+                <div class="col-sm-2 text-right">
+                    <select class="form-control">
+                        <option value="" selected="selected">5</option>
+                        <option value="">10</option>
+                        <option value="">15</option>
+                        <option value="">20</option>
+                    </select>
+                </div>
+<!--                <div class="col-sm-2 text-right">-->
+<!--                    <a href="release"><button type="button" class="btn btn-primary">發布商品</button></a>-->
+<!--                </div>-->
+            </div>
+            <br>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6" v-for="doc in all_doc_data" v-if="this.sort_type === 'grid'">
+                        <div class="product-grid3" style="margin-bottom: 15px">
+                            <div class="product-image3">
+                                <div :id="doc.id + '1'"  class="carousel slide" data-ride="carousel" data-wrap="true" data-touch="true">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active" data-interval="200">
+                                            <img v-bind:src=doc.data().product_one_img_url class="d-block w-100"/>
+                                        </div>
+                                        <div class="carousel-item" data-interval="200">
+                                            <img v-bind:src=doc.data().product_two_img_url class="d-block w-100"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="social">
+                                    <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid, doc.data().book_transaction)"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+<!--                                <span class="product-new-label">New</span>-->
+                            </div>
+                            <div class="product-content">
+                                <div class="card-body">
+                                    <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
+                                    <h6 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h6>
+                                    <p></p>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h6>
+                                    <p></p>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h6>
+                                    <h6 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h6>
+                                    <h6 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'face_to_face'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 面交</h6>
+                                    <p></p>
+                                    <div class="price">
+                                        <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
+                                        <!--                                    <span>$75.00</span>-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12" v-for="doc in all_doc_data" v-if="this.sort_type === 'list'" style="margin-bottom: 20px">
+                        <div class="product-grid3 product-grid3-list" >
+                            <div class="product-image3">
+                                <div :id="doc.id + '2'" class="carousel slide" data-ride="carousel" data-wrap="true" data-touch="true">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active" data-interval="200">
+                                            <img v-bind:src=doc.data().product_one_img_url class="d-block w-100"/>
+                                        </div>
+                                        <div class="carousel-item" data-interval="200">
+                                            <img v-bind:src=doc.data().product_two_img_url class="d-block w-100"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="social">
+                                    <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                    <li v-if="doc.data().release_user_uuid !== this.user.uid && this.user_id_number !== undefined && this.user_id_number !== ''"><a href="javascript:void(0)" @click="addShopCart(doc.id, doc.data().book_classification, doc.data().release_user_uuid, doc.data().book_isbn, doc.data().book_name, doc.data().book_money, doc.data().book_status, doc.data().product_one_img_url, doc.data().release_user_uuid, doc.data().book_transaction)"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+<!--                                <span class="product-new-label">New</span>-->
+                            </div>
+                            <div class="product-content">
+                                <div class="card-body">
+                                    <h4 class="title"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/book.png"> {{ doc.data().book_name }}</h4>
+                                    <h6 class=""><img style="width: 40px;height: 25px" src="../../assets/imgs/png/bar-code.png"> {{ doc.data().book_isbn }}</h6>
+                                    <p></p>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/bookstore.png"> {{ doc.data().book_publishing_house }}</h6>
+                                    <p></p>
+                                    <h6 class=""><img style="width: 35px;height: 30px" src="../../assets/imgs/png/calendar.png"> {{ doc.data().book_publishing_date }}</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_status === 'new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 全新未拆</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'nine_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 九成新</h6>
+                                    <h6 class="" v-else-if="doc.data().book_status === 'eight_new'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 八成新</h6>
+                                    <h6 class="" v-else="doc.data().book_status === 'old'"><img style="width: 35px;height: 35px" src="../../assets/imgs/png/star.png"> 有點久遠了</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_shipment === 'seven_eleven'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 7-11物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'family'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 全家物流</h6>
+                                    <h6 class="" v-else-if="doc.data().book_shipment === 'alone_seller'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 賣家自行宅配</h6>
+                                    <h6 class="" v-else="doc.data().book_shipment === 'black_cat'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/truck.png"> 黑貓宅急便</h6>
+                                    <p></p>
+                                    <h6 class="" v-if="doc.data().book_transaction === 'cash_on_delivery'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 貨到付款</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'nut_coin_payment'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 堅果幣支付</h6>
+                                    <h6 class="" v-else-if="doc.data().book_transaction === 'swipe_online'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 信用卡支付</h6>
+                                    <h6 class="" v-else="doc.data().book_transaction === 'face_to_face'"><img style="width: 35px;height: 30px" src="../../assets/imgs/png/transaction.png"> 面交</h6>
+                                    <p></p>
+                                    <div class="price">
+                                        <img style="width: 35px;height: 30px" src="../../assets/imgs/png/money.png"> {{ doc.data().book_money }}
+                                        <!--                                    <span>$75.00</span>-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+
+<div class="container-fuild" style="margin-top: 30px; margin-right: 30px; margin-left: 30px">
+    <div class="form-group col-md-4" style="text-align: left">
+        <label for="inputState">欲查詢錢包紀錄狀態</label>
+        <select id="inputState" v-model="record_search_type" class="form-control">
+            <option selected value="not_ok">未收款</option>
+            <option value="ok">已收款</option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <thead>
+                        <tr>
+                            <th><span>訂單編號</span></th>
+                            <th><span>付款方</span></th>
+                            <th><span>收款方</span></th>
+                            <th><span>款項目前狀態</span></th>
+                            <th><span>總金額</span></th>
+                            <th><span>歷史建立日期</span></th>
+                            <th><span>收款完成日期</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="doc in this.all_record_data">
+                            <td style="width: 13%;" v-if="doc.data().record_order_id === ''">
+                                <a class="table-link">Demo</a>
+                            </td>
+                            <td style="width: 13%;" v-else-if="doc.data().record_order_id !== ''">
+                                <router-link :to="{ path: '/transactionprocess', query: { order_id: doc.data().record_order_id, status: doc.data().record_status}}" class="table-link">{{doc.data().record_order_id}}</router-link>
+                            </td>
+                            <td class="text-center">
+                                <VueQrcode style="text-align: center" id="qrcode_from" scale="4" :value="doc.data().wallet_address_from"></VueQrcode>
+                            </td>
+                            <td class="text-center">
+                                <VueQrcode style="text-align: center" id="qrcode_to" scale="4" :value="doc.data().wallet_address_to"></VueQrcode>
+                            </td>
+
+                            <td class="text-center" v-if="doc.data().record_ok === 'ok'">
+                                <span class="badge badge-success">已收款</span>
+                            </td>
+                            <td class="text-center" v-else="doc.data().record_ok === 'not_ok'">
+                                <span class="badge badge-info">未收款</span>
+                            </td>
+                            <td >
+                                {{doc.data().record_money}}
+                            </td>
+                            <td>
+                                {{doc.data().record_date}}
+                            </td>
+                            <td>
+                                {{doc.data().record_check_out_date}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center">
+
+    </div>
+    <div style="text-align: center" >
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item" v-for="index in this.total_index"><a class="page-link" href="#">{{ index }}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

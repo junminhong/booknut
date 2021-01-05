@@ -1,0 +1,50 @@
+
+<div class="container pb-5 mb-2" style="margin-top: 30px">
+    <!-- Alert-->
+<!--    <div class="alert alert-info alert-dismissible fade show text-center mb-30"><span class="alert-close" data-dismiss="alert"></span><i class="fe-icon-award"></i>&nbsp;&nbsp; 因應專題全平台輸入折扣碼 <strong>booknut</strong> 則立即享有免運的優惠活動.</div>-->
+    <!-- Cart Item-->
+    <div>
+        <hr>
+        <div class="cart-item d-md-flex justify-content-between" v-for="order in this.all_order_detail_product">
+            <div class="px-3 my-3">
+                <a class="cart-item-product" >
+                    <div class="cart-item-product-thumb"><img v-bind:src=order.product_one_img_url alt="Product"></div>
+                    <div class="cart-item-product-info">
+                        <h4 class="cart-item-product-title">{{ order.order_book_name }}</h4>
+                        <span><strong>ISBN:</strong> {{ order.order_book_isbn }}</span>
+                        <span v-if="order.order_book_status === 'new'"><strong >書籍狀況:</strong> 全新未拆</span>
+                        <span v-else-if="order.order_book_status === 'nine_new'"><strong >書籍狀況:</strong> 九成新</span>
+                        <span v-else-if="order.order_book_status === 'eight_new'"><strong >書籍狀況:</strong> 八成新</span>
+                        <span v-else="order.order_book_status === 'old'"><strong >書籍狀況:</strong> 有點久遠了</span>
+                    </div>
+                </a>
+            </div>
+            <div class="px-3 my-3 text-center">
+                <div class="cart-item-label">數量</div>
+                <div class="count-input">
+                    <select class="form-control">
+                        <option>1</option>
+                    </select>
+                </div>
+            </div>
+            <div class="px-3 my-3 text-center">
+                <div class="cart-item-label">價錢</div><span class="text-xl font-weight-medium">${{ order.order_book_money }}</span>
+            </div>
+        </div>
+        <div class="d-sm-flex justify-content-between align-items-center text-center text-sm-left">
+            <div class="py-2">
+            <span class="d-inline-block align-middle text-sm text-muted font-weight-medium text-uppercase mr-2">
+                運費:</span>
+                <span class="d-inline-block align-middle text-xl font-weight-medium">$ {{fare_discount_money}}</span>
+                <p></p>
+                <span class="d-inline-block align-middle text-sm text-muted font-weight-medium text-uppercase mr-2">
+            總金額:</span><span class="d-inline-block align-middle text-xl font-weight-medium">$ {{total_money}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- Buttons-->
+    <div class="row pt-3 pb-5 mb-2">
+        <div class="col-sm-6 mb-3"><router-link class="btn btn-style-1 btn-secondary btn-block" :to="{ path: '/transactionprocess', query: { order_id: this.$route.query.order_id, status: this.$route.query.status}}"><i class="fe-icon-refresh-ccw"></i>&nbsp;回訂單查詢</router-link></div>
+<!--        <div class="col-sm-6 mb-3"><a class="btn btn-style-1 btn-primary btn-block" href="javascript:void(0)" @click="gotoTransaction"><i class="fe-icon-credit-card"></i>&nbsp;結帳</a></div>-->
+    </div>
+</div>

@@ -1,0 +1,278 @@
+
+<div class="container light-style flex-grow-1 container-p-y" style="text-align: left;margin-top: 30px">
+    <div class="vld-parent">
+        <loading :active="loading"></loading>
+    </div>
+    <h4 class="font-weight-bold py-3 mb-4">
+        修改個人資訊
+    </h4>
+
+    <div class="card overflow-hidden">
+        <div class="row no-gutters row-bordered row-border-light">
+            <div class="col-md-3 pt-0">
+                <div class="list-group list-group-flush account-settings-links">
+                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general" @click="generalType">一般</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password" @click="changePasswordType">密碼變更</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info" @click="realVerificationType">實名認證</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links" @click="socialAccountType">社群帳號設定</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">帳號連動設定</a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications" @click="privacyType">電子錢包</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="account-general">
+
+                        <div class="card-body media align-items-center">
+                            <img src="../../assets/imgs/png/profile.png" id="profile_img" alt="" class="d-block ui-w-80">
+                            <div class="media-body ml-4">
+                                <label class="btn btn-outline-primary">
+                                    上傳大頭貼
+                                    <input type="file" @change="uploadProfilePic" class="account-settings-fileinput">
+                                </label> &nbsp;
+                                <button type="button" class="btn btn-default md-btn-flat" @click="removeProfilePic">重設</button>
+                                <div class="text-light small mt-1">允許JPG、PNG圖片格式，上限1MB</div>
+                            </div>
+                        </div>
+                        <hr class="border-light m-0">
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">使用者暱稱 (可更改)</label>
+                                <input type="text" class="form-control mb-1" v-model="user_name" placeholder="ex: book nut">
+                            </div>
+                            <div :hidden="true" class="form-group">
+                                <label class="form-label">真實姓名</label>
+                                <input type="text" class="form-control" placeholder="ex: book nut">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="text" class="form-control mb-1" :disabled="true" placeholder="booknut@booknut.com" v-model="user_email">
+                                <div class="alert alert-warning mt-3" hidden="true">
+                                    Your email is not confirmed. Please check your inbox.<br>
+                                    <a href="javascript:void(0)">Resend confirmation</a>
+                                </div>
+                            </div>
+                            <div class="form-group" hidden="true">
+                                <label class="form-label">Company</label>
+                                <input type="text" class="form-control" value="Company Ltd.">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="account-change-password">
+                        <div class="card-body pb-2">
+                            <div class="form-group">
+                                <label class="form-label">舊密碼</label>
+                                <input type="password" v-model="user_old_password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">新密碼</label>
+                                <input type="password" v-model="user_new_password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">第二次輸入新密碼</label>
+                                <input type="password" v-model="user_new_confirm_password" class="form-control">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-info">
+                        <div class="alert alert-warning" role="alert">
+                            實名認證目的在於保障平台內會員權益，所以資料再填寫送出後即不可再更改，請謹慎填寫，感謝您的配合。
+                        </div>
+                        <div class="card-body pb-2">
+                            <h3>基本資料</h3>
+                            <hr class="border-light m-0">
+                            <div class="form-group">
+                                <label class="form-label">*真實姓名</label>
+                                <input type="text" v-model="user_real_name" class="form-control" :disabled="is_have_user_real_data" placeholder="ex: 王小明">
+                                <div style="color: red"><small>{{user_real_name_error_msg}}</small></div>
+                            </div>
+                            <div class="form-group form-check form-check-inline">
+                                <label class="form-label">*性別：</label>
+                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" :disabled="is_have_user_real_data" type="radio" checked="true" name="inlineRadioOptions" id="male_option" value="0">
+                                <label class="form-check-label" style="margin-top: -10px;" for="male_option">男</label>
+                                <input class="form-check-input" style="margin-top: -10px; margin-left: 10px" v-model="user_gender" :disabled="is_have_user_real_data" type="radio" name="inlineRadioOptions" id="female_option" value="1">
+                                <label class="form-check-label" style="margin-top: -10px;" for="female_option">女</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">*生日</label>
+                                <input type="date" class="form-control" v-model="user_birthday" :disabled="is_have_user_real_data">
+                                <div style="color: red"><small>{{user_birthday_error_msg}}</small></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">*地址</label>
+                                <input type="text" class="form-control" placeholder="ex: 71005台南市永康區南台街一號" v-model="user_address" :disabled="is_have_user_real_data">
+                                <div style="color: red"><small>{{user_address_error_msg}}</small></div>
+                                <!--                                <select class="custom-select">-->
+                                <!--                                    <option>USA</option>-->
+                                <!--                                    <option selected="">Canada</option>-->
+                                <!--                                    <option>UK</option>-->
+                                <!--                                    <option>Germany</option>-->
+                                <!--                                    <option>France</option>-->
+                                <!--                                </select>-->
+                            </div>
+                        </div>
+                        <hr class="border-light m-0">
+                        <div class="card-body pb-2">
+                            <h3 class="mb-4">進階認證</h3>
+                            <div class="form-group">
+                                <label class="form-label">電話(手機)</label>
+                                <div class="input-group">
+                                    <input type="text" :class="{'form-control': true, 'is-valid': is_have_user_phone_number}" :disabled="is_have_user_phone_number" placeholder="ex: 09xxxxxxx" v-model="user_phone">
+                                    <div class="input-group-append">
+                                        <button type="button" id="send_sms" :hidden="is_have_user_phone_number" class="btn btn-secondary" :disabled="can_resend_sms_btn" @click="sendVerificationPhone">{{send_sms_msg}}</button>
+                                    </div>
+                                    <input type="text" class="form-control" :hidden="id_send_sms" style="margin-left: 10px" placeholder="驗證碼" v-model="verification_code">
+                                    <div class="input-group-append">
+                                        <button type="button" id="verification_sms" :hidden="id_send_sms" class="btn btn-secondary" @click="verificationPhone">確認</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">身份證</label>
+                                <input type="text" :class="{'form-control': true, 'is-valid': user_id_number_is_ok}" disabled="true" placeholder="ex: Lxxxxxxxx" v-model="user_id_number" >
+                                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                                <label class="btn btn-outline-primary" :hidden="is_have_user_real_data" style="margin-top: 10px">
+                                    上傳身分證
+                                    <input type="file" @change="convertBlobImg"  class="account-settings-fileinput">
+                                </label>
+                                <div class="text-light small mt-1">允許JPG、PNG圖片格式，上限1MB，系統不會保留身份證，請放心上傳</div>
+                                <div style="color: red"><small>{{user_id_number_error_msg}}</small></div>
+                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label class="form-label">簡述自己(加快認證)</label>-->
+<!--                                <textarea class="form-control" rows="5" placeholder="為什麼要使用本平台?"></textarea>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-social-links">
+                        <div class="card-body pb-2">
+
+                            <div class="form-group">
+                                <label class="form-label">Twitter</label>
+                                <input type="text" class="form-control" v-model="user_twitter_website">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Facebook</label>
+                                <input type="text" class="form-control" v-model="user_facebook_website">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Google+</label>
+                                <input type="text" class="form-control" v-model="user_google_plus_website">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">LinkedIn</label>
+                                <input type="text" class="form-control" v-model="user_linkedin_website">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Instagram</label>
+                                <input type="text" class="form-control" v-model="user_instagram_website">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-connections">
+                        <div class="alert alert-warning" role="alert">
+                            手機解完綁定後請盡快綁定新手機，否則將會影響自身權益
+                        </div>
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-twitter">Connect to <strong>Twitter</strong></button>-->
+<!--                        </div>-->
+                        <hr class="border-light m-0">
+                        <div class="row" style="margin-right: 0px;margin-left: 0px">
+                            <div class="col-8"><h5 class="mb-2">已綁定手機號碼:  {{user_phone}}</h5></div>
+                            <div class="col-4" ><button type="button" class="btn btn-facebook float-right" @click="removePhoneNumber">解除綁定</button></div>
+                        </div>
+<!--                        <hr class="border-light m-0">-->
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-facebook">Connect to <strong>Facebook</strong></button>-->
+<!--                        </div>-->
+<!--                        <hr class="border-light m-0">-->
+<!--                        <div class="card-body">-->
+<!--                            <button type="button" class="btn btn-instagram">Connect to <strong>Instagram</strong></button>-->
+<!--                        </div>-->
+                    </div>
+                    <div class="tab-pane fade" id="account-notifications">
+                        <div class="card-body pb-2">
+
+                            <h3 class="mb-4">電子錢包及信用卡</h3>
+
+                            <div class="form-group">
+                                <label class="form-label">堅果幣電子錢包地址</label>
+                                <input type="text" class="form-control" :disabled="true" v-model="user_bunt_wallet_address">
+<!--                                <label class="switcher">-->
+<!--                                    <input type="checkbox" class="switcher-input" checked="">-->
+<!--                                    <span class="switcher-indicator">-->
+<!--                      <span class="switcher-yes"></span>-->
+<!--                      <span class="switcher-no"></span>-->
+<!--                    </span>-->
+<!--                                    <span class="switcher-label">Email me when someone comments on my article</span>-->
+<!--                                </label>-->
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信用卡</label>
+                                <input type="text" class="form-control" :disabled="true" placeholder="ex: xxxxxx card number" value="Coming Soon" >
+                                <label class="btn btn-outline-primary" style="margin-top: 10px">
+                                    新增
+                                    <input type="button" class="account-settings-fileinput">
+                                </label>
+<!--                                <label class="switcher">-->
+<!--                                    <input type="checkbox" class="switcher-input" checked="">-->
+<!--                                    <span class="switcher-indicator">-->
+<!--                      <span class="switcher-yes"></span>-->
+<!--                      <span class="switcher-no"></span>-->
+<!--                    </span>-->
+<!--                                    <span class="switcher-label">Email me when someone answers on my forum thread</span>-->
+<!--                                </label>-->
+                            </div>
+                        </div>
+                        <hr class="border-light m-0">
+                        <div class="card-body pb-2">
+                            <h6 class="mb-4">隱私權設定</h6>
+                            <div class="form-group">
+                                <label class="switcher">
+                                    <input type="checkbox" class="switcher-input" v-model="accept_user">
+                                    <span class="switcher-indicator">
+                                      <span class="switcher-yes"></span>
+                                      <span class="switcher-no"></span>
+                                    </span>
+                                    <span class="switcher-label">同意本網站搜集個人資料，提供更好的購物體驗</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="switcher">
+                                    <input type="checkbox" class="switcher-input" checked="true">
+                                    <span class="switcher-indicator">
+                                      <span class="switcher-yes"></span>
+                                      <span class="switcher-no"></span>
+                                    </span>
+                                    <span class="switcher-label">交易區系統通知</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="switcher">
+                                    <input type="checkbox" class="switcher-input" checked="true">
+                                    <span class="switcher-indicator">
+                                      <span class="switcher-yes"></span>
+                                      <span class="switcher-no"></span>
+                                    </span>
+                                    <span class="switcher-label">討論區系統通知</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-right mt-3">
+        <button type="button" class="btn btn-primary" @click="saveProfile">儲存設定</button>&nbsp;
+        <button type="button" class="btn btn-default">取消</button>
+    </div>
+
+</div>

@@ -1,0 +1,11 @@
+body{
+    margin-top:20px;
+    background:#f8f8f8
+}
+.account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
