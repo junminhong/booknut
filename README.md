@@ -30,3 +30,5 @@
 - FireBase
 
 [Live Demo](https://booknut-2d3c9.web.app/)
+
+[影片介紹](https://www.youtube.com/watch?v=VynoXy04R68)
